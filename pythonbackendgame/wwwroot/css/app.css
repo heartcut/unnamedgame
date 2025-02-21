@@ -271,3 +271,113 @@ healthbubbledead {
 }
 
 
+/*--------------minigames-------------------------*/
+.sixnine {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    letter-spacing: 4px;
+    font-size: x-large;
+    color: white;
+}
+/*MAKE A SQUARE GAME BELOW----------------------------------------*/
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 50px solid red;
+    position: absolute;
+    left: 252px;
+    top: 152px;
+    transform-origin: bottom center;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-top: 50px solid blue;
+    position: absolute;
+    left: 252px;
+    top: 98px;
+    transform-origin: top center;
+}
+
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 50px solid green;
+    position: absolute;
+    left: 250px;
+    top: 100px;
+    transform-origin: center left;
+}
+
+.arrow-left {
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-right: 50px solid yellow;
+    position: absolute;
+    left: 305px;
+    top: 100px;
+    transform-origin: center right;
+}
+
+#colorbuttons {
+    border: none;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    font-weight: bolder;
+}
+
+.colorbutton1 {
+    background-color: green;
+    color: blue;
+    height: 50px;
+    width: 120px;
+}
+
+.colorbutton2 {
+    background-color: yellow;
+    color: red;
+    height: 50px;
+    width: 120px;
+}
+
+.colorbutton3 {
+    background-color: blue;
+    color: yellow;
+    height: 50px;
+    width: 120px;
+}
+
+.colorbutton4 {
+    background-color: red;
+    color: green;
+    height: 50px;
+    width: 120px;
+}
+
+.botofgame {
+    position: absolute;
+    bottom: 15px;
+    left: 30%;
+}
+
+#game-title {
+    text-align: center;
+    color: white;
+}

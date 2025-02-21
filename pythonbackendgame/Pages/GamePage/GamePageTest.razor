@@ -1,9 +1,8 @@
 ﻿@page "/game/{amhost}/{lobbynumber}"
 @inject NavigationManager navManager
 
-<h3 style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;">
-    Debug PANAL
-    <Div></Div>
+<h3 style="color: yellow; left: 50%; transform: translateX(-50%); top: 50px; position: fixed;font-size:larger;">
+    Debug PANAL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber
 </h3>
 <cant-select-zone @onmousemove="MyMouseMoved" id="@MDM.MyCursorStyle">
 
@@ -11,28 +10,27 @@
 
     <game-window>
         <player1window>
+            <MakeSquare Var1="1" Var2="2" Var3="3" Var4="4"></MakeSquare>
         </player1window>
         <player2window>
+            <SixNineGame answer1="first" answer2="second"></SixNineGame>
         </player2window>
         <player3window>
+            <MakeSquare Var1="2" Var2="3" Var3="3" Var4="1"></MakeSquare>
         </player3window>
         <player4window>
+            <SixNineGame answer1="first" answer2="second"></SixNineGame>
         </player4window>
     </game-window>
     <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;">I am code:@myid im in lobby @lobbynumber,
-        @if (boolhost)
-        {
-            <div> i am the host the connect palyers is:L @MDM.PlayersInLobby</div>
-        }
-        else
-        {
-            <div> i joined this lobby im player: @MDM.MyPlayerNumber--data from host @datafromhost[0] @datafromhost[1] @datafromhost[2] </div>
-        }
         my id is @myid ---myid @myid--hostid @hostId--i got leaches message <button>connect</button><button @onclick="@Send">send</button></div>
 
 </cant-select-zone>
 
 @code {
+    static Random rndm = new Random();
+    int first = rndm.Next(0, 32);
+    int second = rndm.Next(0, 32);
     [Parameter]
     public string amhost { get; set; }
     [Parameter]
@@ -41,6 +39,7 @@
     bool boolhost = false;
     string myid = GenerateRandomString(6);
     string hostId = "";
+    int localplayernumber = 7;
 
     [Inject]
     protected BrowserService Service { get; set; }
@@ -58,8 +57,6 @@
     HostPeerConnectionManager? hostPeerManager;
     LeechPeerConnectionManager? leechPeerManager;
 
-    private int[] PlayerCords = new int[8];
-    int[] datafromhost = [2, 2,2,0,0,0,0,0,0,0,0];
     int[] datafromleeches = [2, 2,2,2,2];
 
 
@@ -71,18 +68,20 @@
     {
         while (await periodicTimer.WaitForNextTickAsync())
         {
-            if (!boolhost)
+            if (boolhost)
             {
-                if (MDM.MyPlayerNumber == 0)
+                localplayernumber = 1;
+                HostSend();
+            }
+            else if (!boolhost)
+            {
+                if (localplayernumber == 7)
                 {
                     InitSend();
                 }
                 Send();
             }
-            else if (boolhost)
-            {
-                HostSend();
-            }
+            
             StateHasChanged();
         }
     }
@@ -99,78 +98,82 @@
             {
                 MDM.MyCursorStyle = "p" + 1;
                 hostPeerManager = new HostPeerConnectionManager(myid,"",MDM,false);
-                hostPeerManager.OnDataReceived += HandleDataReceived;
+                hostPeerManager.OnDataReceived += HostHandleDataReceived;
             }
             else
             { 
                 leechPeerManager = new LeechPeerConnectionManager(myid, hostId, MDM);
-                leechPeerManager.OnDataReceived += HandleDataReceived;
+                leechPeerManager.OnDataReceived +=LeechHandleDataReceived;
             }
         }
     }
-    private void HandleDataReceived(string data)
+    private void LeechHandleDataReceived(MainDataModel fromhost)
     {
-        if (!boolhost)
+        
+        //this means it is a message for assignment
+        if (fromhost.ReasonForUpdate == "init"&& fromhost.SpecifyPlayerID == myid)
         {
-            datafromhost = data
-            .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-            .Select(messagetext => Convert.ToInt32(messagetext))
-            .ToArray();
-            //this means it is a message for assignment
-            if (datafromhost[2] == 0 && datafromhost[1].ToString() == myid)
+            localplayernumber = fromhost.SpecifyPlayerInit;
+            MDM.MyCursorStyle = "p" + localplayernumber;
+            
+        }
+        else if (fromhost.ReasonForUpdate == "regular")
+        {
+            MDM.P1Xcords = fromhost.P1Xcords;
+            MDM.P1Ycords = fromhost.P1Ycords;
+            if (localplayernumber != 2)
             {
-                MDM.MyPlayerNumber = datafromhost[0];
-                MDM.MyCursorStyle = "p" + MDM.MyPlayerNumber;
+                MDM.P2Xcords = fromhost.P2Xcords;
+                MDM.P2Ycords = fromhost.P2Ycords;
             }
-            else if (datafromhost[2] == 1)
+            else if (localplayernumber != 3)
             {
-                MDM.P1Xcords = datafromhost[3];
-                MDM.P1Ycords = datafromhost[4];
-                if (MDM.MyPlayerNumber != 2)
-                {
-                    MDM.P2Xcords = datafromhost[5];
-                    MDM.P2Ycords = datafromhost[6];
-                }
-                else if (MDM.MyPlayerNumber != 3)
-                {
-                    MDM.P3Xcords = datafromhost[7];
-                    MDM.P3Ycords = datafromhost[8];
-                }
-                else if (MDM.MyPlayerNumber != 4)
-                {
-                    MDM.P4Xcords = datafromhost[9];
-                    MDM.P4Ycords = datafromhost[10];
-                }
+                MDM.P3Xcords = fromhost.P3Xcords;
+                MDM.P3Ycords = fromhost.P3Ycords;
+            }
+            else if (localplayernumber != 4)
+            {
+                MDM.P4Xcords = fromhost.P4Xcords;
+                MDM.P4Ycords = fromhost.P4Ycords;
             }
         }
-        else if (boolhost)//add logic to asdsign player number here
+        StateHasChanged();
+    }
+    private void HostHandleDataReceived(string data)
+    {
+        
+        //add logic to asdsign player number here
+        
+        datafromleeches = data
+        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(messagetext => Convert.ToInt32(messagetext))
+        .ToArray();
+        //this means the connection wants to be assigned a player number
+        if (datafromleeches[2] == 0)
         {
-            datafromleeches = data
-            .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-            .Select(messagetext => Convert.ToInt32(messagetext))
-            .ToArray();
-            //this means the connection wants to be assigned a player number
-            if (datafromleeches[2] == 0)
-            {
-                MDM.PlayersInLobby++;
-                InitHostSend();
-            }
-            if (datafromleeches[0] == 2)
-            {
-                MDM.P2Xcords = datafromleeches[3];
-                MDM.P2Ycords = datafromleeches[4];
-            }
-            if (datafromleeches[0] == 3)
-            {
-                MDM.P3Xcords = datafromleeches[3];
-                MDM.P3Ycords = datafromleeches[4];
-            }
-            if (datafromleeches[0] == 4)
-            {
-                MDM.P4Xcords = datafromleeches[3];
-                MDM.P4Ycords = datafromleeches[4];
-            }
+            MDM.PlayersInLobby++;
+            MDM.SpecifyPlayerInit = MDM.PlayersInLobby+1;
+            MDM.SpecifyPlayerID = datafromleeches[1].ToString();
+            MDM.ReasonForUpdate = "init";
+            InitHostSend();
+            MDM.ReasonForUpdate = "regular";
         }
+        if (datafromleeches[0] == 2)
+        {
+            MDM.P2Xcords = datafromleeches[3];
+            MDM.P2Ycords = datafromleeches[4];
+        }
+        if (datafromleeches[0] == 3)
+        {
+            MDM.P3Xcords = datafromleeches[3];
+            MDM.P3Ycords = datafromleeches[4];
+        }
+        if (datafromleeches[0] == 4)
+        {
+            MDM.P4Xcords = datafromleeches[3];
+            MDM.P4Ycords = datafromleeches[4];
+        }
+        
         StateHasChanged();
     }
     //
@@ -178,13 +181,11 @@
     // the players lobby player number, theplayers peerid, reason for update0 for assignment 1 for update, mousex, mousey,
     //
     //
-    //host to leech (from host)
-    //player lobby number, players peer id,reason for update 0 for player number assignment 1 for update, player1x, player1y, player2x, player2y, player3x, player3y, player4x, player4y
-    //
-    void Send() => leechPeerManager?.SendData(MDM.MyPlayerNumber +","+myid+",1,"+MDM.mycursx+","+MDM.mycursy);
+    
+    void Send() => leechPeerManager?.SendData(localplayernumber +","+myid+",1,"+MDM.mycursx+","+MDM.mycursy);
     void InitSend() => leechPeerManager?.SendData("0," + myid + ",0," + MDM.mycursx + "," + MDM.mycursy);
-    void HostSend() => hostPeerManager?.SendData("0,0,1," + MDM.P1Xcords + "," + MDM.P1Ycords + "," + MDM.P2Xcords + "," + MDM.P2Ycords + "," + MDM.P3Xcords + "," + MDM.P3Ycords + "," + MDM.P4Xcords + "," + MDM.P4Ycords);
-    void InitHostSend() => hostPeerManager?.SendData((MDM.PlayersInLobby + 1).ToString() + "," + datafromleeches[1].ToString() + ",0,8,8,8,8,8,8,8,8");
+    void HostSend() => hostPeerManager?.SendData(MDM);
+    void InitHostSend() => hostPeerManager?.SendData(MDM);
 
     public void Dispose()
     {

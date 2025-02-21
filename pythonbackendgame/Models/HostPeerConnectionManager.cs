@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.PeerJS;
@@ -17,7 +18,7 @@ namespace pythonbackendgame.Models
         private bool connectoleech;
         private string leechplayernumber;
         private string leechpeerid;
-
+        private MainDataModel MDM;
         public event Action<string>? OnDataReceived;
         public event Action<string>? OnPeerConnected;
         public event Action? OnPeerDisconnected;
@@ -27,21 +28,19 @@ namespace pythonbackendgame.Models
             this.myId = myId;
             this.connectId = connectId;
             this.connectoleech = connecttoleech;
+            this.MDM = MDM;
 
             peer = new Peer(myId);
             peer.OnOpen += Peer_OnOpen;
             peer.OnConnection += Peer_OnConnection;
         }
-
         private void Peer_OnOpen()
         {
             //if (connectoleech)
             //{
             //    ConnectToLeech();
-
             //}
         }
-
         private void Peer_OnConnection(DataConnection conn)
         {
             connections.Add(conn);
@@ -49,36 +48,22 @@ namespace pythonbackendgame.Models
             conn.OnClose += () => { OnPeerDisconnected?.Invoke(); };
             OnPeerConnected?.Invoke(conn.Peer);
             //SendData("2,"+ leechpeerid +",0,0,0,0,0,0,0,0,0");
-
         }
-
         private void DataConnection_OnData(JSObject msg)
         {
             string data = msg.JSRef!.As<string>();
             OnDataReceived?.Invoke(data);
         }
-        
-        public void ConnectToLeech(string leechplayernumber, string leechpeerid)
+        public void SendData(MainDataModel data)
         {
-            this.leechplayernumber = leechplayernumber;
-            this.leechpeerid = leechpeerid;
-            if (peer == null) return;
-            var conn = peer.Connect(leechpeerid);
-            conn.OnData += DataConnection_OnData;
-            connections.Add(conn);
-            //add logic to send player their number
-            //SendData(leechplayernumber + "," + leechpeerid + ",0,0,0,0,0,0,0,0,0");
+            if (data == null) return;
 
-
-        }
-        public void SendData(string message)
-        {
+            string jsonData = JsonConvert.SerializeObject(data); // Convert object to JSON
             foreach (var conn in connections)
             {
-                conn.Send(message);
+                conn.Send(jsonData);
             }
         }
-
         public void Dispose()
         {
             foreach (var conn in connections)

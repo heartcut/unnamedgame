@@ -20,7 +20,9 @@ namespace pythonbackendgame.Models
             mycursy = e.ClientY - (BrowserHeight / 2);
         }
 
-
+        public string ReasonForUpdate { get; set; }
+        public int SpecifyPlayerInit { get; set; }
+        public string SpecifyPlayerID { get; set; }
         public double P1Xcords { get; set; }
         public double P1Ycords { get; set; }
         public double P2Xcords { get; set; }

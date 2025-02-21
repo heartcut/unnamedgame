@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.PeerJS;
@@ -15,7 +16,7 @@ namespace pythonbackendgame.Models
         private string myId;
         private string connectId;
 
-        public event Action<string>? OnDataReceived;
+        public event Action<MainDataModel>? OnDataReceived;
         public event Action<string>? OnPeerConnected;
         public event Action? OnPeerDisconnected;
 
@@ -44,8 +45,19 @@ namespace pythonbackendgame.Models
 
         private void DataConnection_OnData(JSObject msg)
         {
-            string data = msg.JSRef!.As<string>();
-            OnDataReceived?.Invoke(data);
+            string data = msg.JSRef!.As<string>(); // Receive raw JSON string
+            try
+            {
+                MainDataModel? receivedData = JsonConvert.DeserializeObject<MainDataModel>(data);
+                if (receivedData != null)
+                {
+                    OnDataReceived?.Invoke(receivedData); // Notify subscribers with the object
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deserializing received data: " + ex.Message);
+            }
         }
         void DataConnection_OnOpen()
         {
