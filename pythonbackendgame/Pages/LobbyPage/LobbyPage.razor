@@ -1,0 +1,45 @@
+﻿@page "/lobbypage"
+@inject NavigationManager navManager
+
+<h1 style="text-align:center; color:white;">Welcome to unnamed game!</h1>
+<h2 style="text-align:center">Join or Create a lobby</h2>
+
+<lobby-window >
+    <div>Host Lobby <div><button @onclick=@HostLobby> Go</button></div></div>
+    <div>Join Lobby <div><input placeholder="lobby id here" style="width: 350px;" @bind=@lobbynumber></input><div><button @onclick=@GoToLobby> Go</button></div></div></div>
+</lobby-window>
+
+
+@code {
+
+    string lobbynumber = "";
+
+    void GoToLobby(string lobbynumber)
+    {
+        navManager.NavigateTo("/game/0/" + lobbynumber);
+    }
+
+    void GoToLobby() => GoToLobby(lobbynumber);
+
+    void HostLobby(string lobbynumber)
+    {
+        navManager.NavigateTo("/game/1/" + lobbynumber);
+    }
+
+    void HostLobby() => HostLobby(GenerateRandomString(6));
+
+    public static string GenerateRandomString(int length)
+    {
+        const string chars = "0123456789";
+        var random = new Random();
+        var result = new char[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            result[i] = chars[random.Next(chars.Length)];
+        }
+
+        return new string(result);
+    }
+
+}

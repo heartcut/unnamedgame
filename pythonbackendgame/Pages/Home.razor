@@ -1,0 +1,144 @@
+﻿@page "/"
+
+@using SpawnDev.BlazorJS.JSObjects;
+@using Newtonsoft.Json;
+@using SpawnDev.BlazorJS.JSObjects.WebRTC;
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<a href="lobbypage">lobbypage</a>
+
+Welcome to your new app.
+<div>my random id is @myid this is to test @messagetext </div>
+
+<button>create lobby</button>
+<div>______  _________</div>
+
+<button>join lobby</button>
+
+
+<div>
+    <input style="width: 350px;" @bind=@id readonly></input>
+</div>
+<div>
+    <input placeholder="Remote Id" style="width: 350px;" @bind=@targetId></input>
+    <button @onclick=@Connect>connect</button>
+</div>
+<div>
+    <input placeholder="message" style="width: 350px;" @bind=@msg></input>
+    <button @onclick=@Send>send</button>
+</div>
+<pre style="width: 600px; word-wrap: break-word; white-space: normal;">@((MarkupString)log)</pre>
+
+@code {
+    [Inject] BlazorJSRuntime JS { get; set; }
+    Peer? peer = null;
+    DataConnection? dataConnection = null;
+    string id = "";
+    string targetId = "";
+    string msg = "";
+    string log = "";
+    string messagetext = "";
+    string myid = GenerateRandomString(6);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Load the PeerJS Javascript library.
+            // the library can be loaded in the index.html instead
+            peer = new Peer(myid);
+            peer.OnConnection += Peer_OnConnection;
+        }
+    }
+
+    void Peer_OnConnection(DataConnection dataConnection)
+    {
+        InitDataConnection(dataConnection);
+    }
+
+
+    void Connect()
+    {
+        if (peer == null) return;
+        DisposeDataConnection();
+        InitDataConnection(peer.Connect(targetId));
+    }
+
+    void InitDataConnection(DataConnection dataConnection)
+    {
+        if (this.dataConnection != null) return;
+        this.dataConnection = dataConnection;
+        dataConnection.OnOpen += DataConnection_OnOpen;
+        dataConnection.OnClose += DataConnection_OnClose;
+        dataConnection.OnData += DataConnection_OnData;
+    }
+
+    void DataConnection_OnData(JSObject msg)
+    {
+        //Log(">> " + msg.JSRef!.As<string>());
+        messagetext = msg.JSRef!.As<string>();
+        StateHasChanged();
+
+    }
+
+    void DataConnection_OnOpen()
+    {
+        Send($"Hello from {id}");
+    }
+
+    void DataConnection_OnClose()
+    {
+        DisposeDataConnection();
+    }
+
+
+    void DisposeDataConnection()
+    {
+        if (dataConnection != null)
+        {
+            dataConnection.OnOpen -= DataConnection_OnOpen;
+            dataConnection.OnClose -= DataConnection_OnClose;
+            dataConnection.OnData -= DataConnection_OnData;
+            dataConnection.Dispose();
+            dataConnection = null;
+        }
+    }
+
+    void Send(string msg)
+    {
+        if (dataConnection == null) return;
+        dataConnection.Send(msg);
+        //Log($"<< {msg}");
+    }
+
+    void Send() => Send(msg);
+
+
+    public void Dispose()
+    {
+        DisposeDataConnection();
+        if (peer != null)
+        {
+            peer.OnConnection -= Peer_OnConnection;
+            peer.Destroy();
+            peer.Dispose();
+            peer = null;
+        }
+    }
+    public static string GenerateRandomString(int length)
+    {
+        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new Random();
+        var result = new char[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            result[i] = chars[random.Next(chars.Length)];
+        }
+
+        return new string(result);
+    }
+}

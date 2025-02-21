@@ -1,0 +1,44 @@
+﻿@page "/apitestpage"
+@using System;
+@using System.Net.Http;
+@using System.Threading.Tasks;
+<PageTitle>api TEST</PageTitle>
+
+<h1>API TEST</h1>
+
+<a href="apitestpage">gotoapipage</a>
+
+<button @onclick="GetApiValue" type="button">Click Me to access an api!</button>
+
+<h2>@fromapivalue</h2>
+
+
+
+@code{
+
+    string fromapivalue = "no value yet";
+
+
+    private static readonly HttpClient client = new HttpClient();
+    async void GetApiValue()
+    {
+        try
+        {
+            string url = "http://127.0.0.1:5000/getplayersinlobby"; // Replace with your Flask API endpoint
+            HttpResponseMessage response = await client.GetAsync(url);
+
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            fromapivalue = responseBody;
+        }
+        catch (HttpRequestException e)
+        {
+            fromapivalue = e.Message;
+        }
+        StateHasChanged();
+        
+    }
+    
+
+}
