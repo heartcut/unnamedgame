@@ -17,3 +17,7 @@ builder.Services.AddBlazorJSRuntime();
 
 await builder.Build().RunAsync();
 
+//navigate to the wwwroot in terminal
+//git add .
+//git commit -m "Fix base href for GitHub Pages"
+//git push origin gh-pages --force
