@@ -39,7 +39,6 @@
     string myid = GenerateRandomString(6);
     string hostId = "";
     int localplayernumber = 7;
-    string lobbyurl = "test";
     [Inject]
     protected BrowserService Service { get; set; }
 
@@ -57,10 +56,16 @@
     HostPeerConnectionManager? hostPeerManager;
     LeechPeerConnectionManager? leechPeerManager;
 
+    private string lobbyurl;
+    //string lobbyurl = "test";
 
     protected override void OnInitialized()
     {
-        lobbyurl = $"https://localhost:7224/game/0/{lobbynumber}";
+        string baseUrl = navManager.BaseUri.TrimEnd('/');
+
+        // Set the lobby URL dynamically based on the current environment
+        lobbyurl = $"{baseUrl}/game/0/{lobbynumber}";
+        //lobbyurl = $"https://localhost:7224/game/0/{lobbynumber}";
         boolhost = amhost == "1";
         if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
         myid = boolhost ? lobbynumber : GenerateRandomString(6);
