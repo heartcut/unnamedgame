@@ -17,7 +17,13 @@ builder.Services.AddBlazorJSRuntime();
 
 await builder.Build().RunAsync();
 
-//navigate to the wwwroot in terminal
+//things to change to work on github
+//paths ./ in the index.html <base href="/unnamedgame/" />
+//lobby page navManager.NavigateTo("/unnamedgame/game/0/" + lobbynumber);
+// navManager.NavigateTo("/unnamedgame/game/1/" + lobbynumber);
+//paths to navigate the lobby and gamepage in lobbypage
+//first publish the solution
+//navigate to the wwwroot in terminal \repos\pythonbackendgame\pythonbackendgame\bin\Release\net8.0\browser-wasm\publish\wwwroot
 //git add .
 //git commit -m "Fix base href for GitHub Pages"
 //git push origin gh-pages --force
