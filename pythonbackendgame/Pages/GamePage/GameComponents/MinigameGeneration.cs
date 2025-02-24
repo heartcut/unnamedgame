@@ -6,13 +6,10 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
     {
         public static void StartNewGameLeech(LeechSendModel lsm)
         {
-            //lsm.MyState = 0;
             int[] tempgames = { 0, 1,4 };
             Random rndm = new Random();
 
             int whatgame = tempgames[rndm.Next(0, 3)];
-
-
 
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
@@ -21,8 +18,6 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
             lsm.GameVar3 = tempvars[2];
             lsm.GameVar4 = tempvars[3];
             lsm.PlayerGame = whatgame;
-            //return lsm;
-            //return new[] { tempvars[0], tempvars[1], tempvars[2], tempvars[3], whatgame };
         }
         public static void StartNewGameHost(MainDataModel mdm)
         {
@@ -32,8 +27,6 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
 
             int whatgame = tempgames[rndm.Next(0, 3)];
 
-
-
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
             mdm.P1GameVar1 = tempvars[0];
@@ -41,18 +34,12 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
             mdm.P1GameVar3 = tempvars[2];
             mdm.P1GameVar4 = tempvars[3];
             mdm.P1Game = whatgame;
-
-            //return mdm;
-            //return new[] { tempvars[0], tempvars[1], tempvars[2], tempvars[3], whatgame };
         }
         public static int[] InitialHostGeneration()
         {
             int[] tempgames = {0, 1,4};
             Random rndm = new Random();
-
             int whatgame = tempgames[rndm.Next(0, 3)];
-
-
 
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);

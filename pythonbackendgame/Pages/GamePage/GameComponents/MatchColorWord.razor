@@ -42,7 +42,6 @@
 
     PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.016));
 
-
     public int gamestate = 0;
     int timer = 0;
     Random rndm = new Random();
@@ -96,7 +95,6 @@
             if (playeriam == 1) { mainDataModel.P1State = 0;  }
             else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
             //StateHasChanged();
-            //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
         }
         else
         {
@@ -105,8 +103,6 @@
             if (playeriam == 1) { mainDataModel.P1State = 0;  }
             else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
             //StateHasChanged();
-            
-            //await MinigameGeneration.PlayerFinishedGame(playernumber, false, lobbynumber, hubConnection);
         }
     }
     public void Dispose()

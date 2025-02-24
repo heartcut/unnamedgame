@@ -58,22 +58,21 @@
                 if (playeriam == 1) { mainDataModel.P1GameVar1++; }
                 else { lsm.GameVar1++; }
                 Var1++;
-                //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
                 break;
             case 2:
                 if (playeriam == 1) { mainDataModel.P1GameVar2++; }
                 else { lsm.GameVar2++; }
-                Var2++;//await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
+                Var2++;
                 break;
             case 3:
                 if (playeriam == 1) { mainDataModel.P1GameVar3++; }
                 else { lsm.GameVar3++; }
-                Var3++;//await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
+                Var3++;
                 break;
             case 4:
                 if (playeriam == 1) { mainDataModel.P1GameVar4++; }
                 else { lsm.GameVar4++; }
-                Var4++;//await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
+                Var4++;
                 break;
         }
         if (Var1 % 4 == 0 && Var2 % 4 == 0 && Var3 % 4 == 0 && Var4 % 4 == 0)
@@ -84,9 +83,7 @@
             if (playeriam == 1) { mainDataModel.P1State = 0;  }
             else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
             //StateHasChanged();
-            //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
         }
         //StateHasChanged();
     }
-
 }

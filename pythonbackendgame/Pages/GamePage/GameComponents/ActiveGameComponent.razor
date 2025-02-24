@@ -24,7 +24,6 @@
     }
     else if (playergame == 2)
     {
-
     }
     else if (playergame == 3)
     {
@@ -39,15 +38,6 @@
         {
             <MatchColorWord playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
         }
-
-    }
-    else if (playergame == -1)
-    {
-       <div>nothin</div>
-
-    }
-    else
-    {
     }
 }
 else
@@ -55,9 +45,7 @@ else
     <PlaceholderGame whichplayersgame="whichplayersgame" playeriam="playeriam" answer1="1" answer2="2" @bind-leechsm="lsm" @bind-mainDataModel="mainDataModel" />
 }
 
-
 @code {
-    
 
     int var1 =1;
     int var2 =1;
@@ -149,13 +137,4 @@ else
             break;
         }
     } 
-    
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            
-        }
-        
-    }
 }

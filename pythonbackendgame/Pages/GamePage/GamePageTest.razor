@@ -2,7 +2,7 @@
 @inject NavigationManager navManager
 
 <h3 style="color: yellow; left: 50%; transform: translateX(-50%); top: 50px; position: fixed;font-size:larger;">
-    Debug PANAL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber var1 @MDM.P1GameVar1 var2 @MDM.P1GameVar2 var3 @MDM.P1GameVar3 var4 @MDM.P1GameVar4 state @MDM.P1State game @MDM.P1Game url @lobbyurl
+    Debug PANEL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber
 </h3>
 <cant-select-zone @onmousemove="MyMouseMoved" id="@MDM.MyCursorStyle">
 
@@ -50,22 +50,18 @@
 
     [Inject] BlazorJSRuntime JS { get; set; }
 
-    /////// <summary>
-    /// /////////////////////////////////////////////////////////////////////////////////////////
-    /// </summary>
     HostPeerConnectionManager? hostPeerManager;
     LeechPeerConnectionManager? leechPeerManager;
 
     private string lobbyurl;
-    //string lobbyurl = "test";
 
     protected override void OnInitialized()
     {
-        string baseUrl = navManager.BaseUri.TrimEnd('/');
-
         // Set the lobby URL dynamically based on the current environment
+        //this way once the pipeline puts it on github pages the url is correct with.github/workflow
+        string baseUrl = navManager.BaseUri.TrimEnd('/');
         lobbyurl = $"{baseUrl}/game/0/{lobbynumber}";
-        //lobbyurl = $"https://localhost:7224/game/0/{lobbynumber}";
+
         boolhost = amhost == "1";
         if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
         myid = boolhost ? lobbynumber : GenerateRandomString(6);
@@ -80,7 +76,6 @@
         }
         else
         {
-
             leechPeerManager = new LeechPeerConnectionManager(myid, hostId, LSM);
             leechPeerManager.OnDataReceived += LeechHandleDataReceived;
         }
@@ -110,40 +105,17 @@
             StateHasChanged();
         }
     }
-    new int[] temp = new int[5];
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // boolhost = amhost == "1";
-            // if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
-            // myid = boolhost ? lobbynumber : GenerateRandomString(6);
-            // hostId = lobbynumber;
-            // temp = MinigameGeneration.InitialHostGeneration();
-            // MDM.P1Game = temp[4];
-            // MDM.P1GameVar1 = temp[0];
-            // MDM.P1GameVar2 = temp[1];
-            // MDM.P1GameVar3 = temp[2];
-            // MDM.P1GameVar4 = temp[3];
-            // MDM.P1State = 1;
-            // if (boolhost)
-            // {
-            //     MDM.MyCursorStyle = "p" + 1;
-            //     MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
-            //     hostPeerManager = new HostPeerConnectionManager(myid,"",MDM,false);
-            //     hostPeerManager.OnDataReceived += HostHandleDataReceived;
-            // }
-            // else
-            // { 
 
-            //     leechPeerManager = new LeechPeerConnectionManager(myid, hostId, LSM);
-            //     leechPeerManager.OnDataReceived +=LeechHandleDataReceived;
-            // }
-        }
-    }
+    void Send() => leechPeerManager?.SendData(LSM);
+    void InitSend() => leechPeerManager?.SendData(LSM);
+
+    void HostSend() => hostPeerManager?.SendData(MDM);
+    void InitHostSend() => hostPeerManager?.SendData(MDM);
+
+    new int[] temp = new int[5];
+    
     private void LeechHandleDataReceived(MainDataModel fromhost)
     {
-        
         //this means it is a message for assignment
         if (fromhost.ReasonForUpdate == "init"&& fromhost.SpecifyPlayerID == myid)
         {
@@ -202,8 +174,6 @@
                 LSM.MyState = 1;
                 MDM.P4State = 1;
             }
-            
-            
         }
         else if (fromhost.ReasonForUpdate == "regular")
         {
@@ -248,23 +218,15 @@
                 MDM.P4GameVar4 = fromhost.P4GameVar4;
                 MDM.P4State = fromhost.P4State;
             }
-            
         }
         //StateHasChanged();
     }
     private void HostHandleDataReceived(LeechSendModel lsm)
     {
-        
         //add logic to asdsign player number here
-        
         //this means the connection wants to be assigned a player number
-        
         if (lsm.ReasonForUpdate=="init")
         {
-            if (lsm.PlayerPeerId== MDM.P2ID)
-            {
-
-            }
             MDM.PlayersInLobby++;
             MDM.SpecifyPlayerInit = MDM.PlayersInLobby+1;
             MDM.SpecifyPlayerID = lsm.PlayerPeerId;
@@ -276,7 +238,6 @@
         {
             switch (lsm.PlayerLobbyNumber)
             {
-
                 case 2:
                     MDM.P2Xcords = lsm.PlayerXcords;
                     MDM.P2Ycords = lsm.PlayerYcords;
@@ -286,7 +247,6 @@
                     MDM.P2GameVar4 = lsm.GameVar4;
                     MDM.P2Game = lsm.PlayerGame;
                     MDM.P2State = lsm.MyState;
-
                     break;
                 case 3:
                     MDM.P3Xcords = lsm.PlayerXcords;
@@ -308,27 +268,11 @@
                     MDM.P4Game = lsm.PlayerGame;
                     MDM.P4State = lsm.MyState;
                     break;
-
             }
         }
         //StateHasChanged();
     }
-    //
-    // leech to host (from leech)
-    // the players lobby player number, theplayers peerid, reason for update0 for assignment 1 for update, mousex, mousey,
-    //
-    //
     
-    //void Send() => leechPeerManager?.SendData(localplayernumber +","+myid+",1,"+MDM.mycursx+","+MDM.mycursy);
-    //void InitSend() => leechPeerManager?.SendData("0," + myid + ",0," + MDM.mycursx + "," + MDM.mycursy);
-
-
-    void Send() => leechPeerManager?.SendData(LSM);
-    void InitSend() => leechPeerManager?.SendData(LSM);
-
-    void HostSend() => hostPeerManager?.SendData(MDM);
-    void InitHostSend() => hostPeerManager?.SendData(MDM);
-
     public void Dispose()
     {
         if (!boolhost)
@@ -351,7 +295,6 @@
         {
             result[i] = chars[random.Next(chars.Length)];
         }
-
         return new string(result);
     }
     async Task MyMouseMoved(MouseEventArgs e)
@@ -375,10 +318,6 @@
             MDM.P1Xcords = MDM.mycursx;
             MDM.P1Ycords = MDM.mycursy;
         }
-        
     }
-   
 //Int32 unixTimestamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-
-
 }

@@ -1,5 +1,4 @@
-﻿<div>Your random numbers are: @answer1 and @answer2</div>
-<div>Please wait a MOMENT WHILE WE LOAD THE NEXT MINIGAME player i am: @playeriam</div>
+﻿<div>Please wait a MOMENT WHILE WE LOAD THE NEXT MINIGAME player i am: @playeriam</div>
 
 @code {
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
@@ -16,19 +15,6 @@
     public int playeriam { get; set; }
     [Parameter]
     public int whichplayersgame { get; set; }
-
-    // protected void OnParametersSet()
-    // {
-    //     Task.Delay(1000);
-
-    //     if (playeriam == 1) { MinigameGeneration.StartNewGameHost(mainDataModel); mainDataModel.P1State = 1; }
-
-    //     if (leechsm != null)
-    //     {
-    //         if (playeriam == 2 || playeriam == 3 || playeriam == 4) { MinigameGeneration.StartNewGameLeech(leechsm); leechsm.MyState = 1; switch (playeriam) { case 2: mainDataModel.P2State = 1; break; case 3: mainDataModel.P3State = 1; break; case 4: mainDataModel.P4State = 1; break; } }
-
-    //     }
-    // }
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine($"[OnParametersSet] Player {playeriam} - before: p1game={mainDataModel.P1Game}");
@@ -39,23 +25,9 @@
         if (leechsm != null)
         {
             if (whichplayersgame == 2 || whichplayersgame == 3 || whichplayersgame == 4) { MinigameGeneration.StartNewGameLeech(leechsm); leechsm.MyState = 1; switch (playeriam) { case 2: mainDataModel.P2State = 1; break; case 3: mainDataModel.P3State = 1; break; case 4: mainDataModel.P4State = 1; break; } }
-
         }
         Console.WriteLine($"[OnParametersSet] Player {playeriam} - After: p1game={mainDataModel.P1Game}");
-
     }
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    //         // Wait for 1 second after the component is rendered
-    //         await Task.Delay(1000);
-    //         await Go();
-
-
-    //         StateHasChanged();
-    //     }
-    // }
     public async Task Go()
     {
         if (playeriam == 1) { MinigameGeneration.StartNewGameHost(mainDataModel); mainDataModel.P1State = 1; }
@@ -63,13 +35,8 @@
         if (leechsm!=null)
         { 
             if (playeriam == 2 || playeriam == 3 || playeriam == 4) { MinigameGeneration.StartNewGameLeech(leechsm); leechsm.MyState = 1; switch (playeriam) { case 2: mainDataModel.P2State = 1; break; case 3: mainDataModel.P3State = 1; break; case 4: mainDataModel.P4State = 1; break; } }
-
         }
         await Task.Delay(1000);
-
-        
-
-        //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
     }
    
 }

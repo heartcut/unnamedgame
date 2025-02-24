@@ -79,15 +79,11 @@
                 if (playeriam == 1)
                 {
                     mainDataModel.P1GameVar1 = 99;
-                    //StateHasChanged();
-
                 }
                 else
                 {
                     lsm.GameVar1 = 99;
-                    //StateHasChanged();
                 }
-                //await hubConnection.SendAsync("UpdateGameVars", lobbynumber,playernumber,99,answer2,0,0,0);
             }
             if (x == answer2)
             {
@@ -96,24 +92,18 @@
                 if(playeriam == 1)
                 {
                     mainDataModel.P1GameVar2 = 99;
-                    //StateHasChanged();
                 }
                 else
                 {
                     lsm.GameVar2 = 99;
-                    //StateHasChanged();
                 }
-                //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, answer1, 99, 0, 0,0);
             }
-            //StateHasChanged();
             if (rightanswer == 1)
             {
                 status = "youwin!";
                 await Task.Delay(1000);
                 if (playeriam == 1) { mainDataModel.P1State = 0; }
                 else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
-                //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
-                    //StateHasChanged();
                 }
                 rightanswer++;
             }
@@ -123,8 +113,6 @@
                 await Task.Delay(1000);
             if (playeriam == 1) { mainDataModel.P1State = 0;  }
             else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
-                //await MinigameGeneration.PlayerFinishedGame(playernumber, false, lobbynumber, hubConnection);
-                //StateHasChanged();
             }
             else
             {
