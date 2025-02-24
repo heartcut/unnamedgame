@@ -9,17 +9,17 @@
     <PlayerCursors MDM="MDM" />
 
     <game-window>
-        <player1window>
+        <player1window style="@MDM.ponezone">
             <MakeSquare Var1="1" Var2="2" Var3="3" Var4="4"></MakeSquare>
         </player1window>
-        <player2window>
-            <SixNineGame answer1="first" answer2="second"></SixNineGame>
+        <player2window style="@MDM.ponezone">
+            <ActiveGameComponent ingame="-1" playergame="1" Var1="1" Var2="2" Var3="3" Var4="4"></ActiveGameComponent>
         </player2window>
-        <player3window>
-            <MakeSquare Var1="2" Var2="1" Var3="4" Var4="2"></MakeSquare>
-        </player3window>
-        <player4window>
-            <SixNineGame answer1="first" answer2="second"></SixNineGame>
+        <player3window style="@MDM.ponezone">
+            <ActiveGameComponent ingame = "1" playergame = "1" Var1="1" Var2="2" Var3="3" Var4="4"></ActiveGameComponent>
+        </player3window> 
+        <player4window style="@MDM.ponezone">
+            <ActiveGameComponent ingame="0" playergame="1" Var1="1" Var2="2" Var3="3" Var4="4"></ActiveGameComponent>
         </player4window>
     </game-window>
     <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;">I am code:@myid im in lobby @lobbynumber,
@@ -97,8 +97,10 @@
             if (boolhost)
             {
                 MDM.MyCursorStyle = "p" + 1;
+                MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
                 hostPeerManager = new HostPeerConnectionManager(myid,"",MDM,false);
                 hostPeerManager.OnDataReceived += HostHandleDataReceived;
+                StateHasChanged();
             }
             else
             { 
@@ -115,6 +117,13 @@
         {
             localplayernumber = fromhost.SpecifyPlayerInit;
             MDM.MyCursorStyle = "p" + localplayernumber;
+            //this is making other players zones un clickable
+            switch (localplayernumber)
+            {
+                case 2: MDM.ponezone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; break;
+                case 3: MDM.ptwozone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; break;
+                case 4: MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; break;
+            }
             
         }
         else if (fromhost.ReasonForUpdate == "regular")
