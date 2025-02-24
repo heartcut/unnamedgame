@@ -1,0 +1,48 @@
+name: Deploy Blazor to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create or Update githubactions Branch
+        run: |
+          git checkout -B githubactions
+          sed -i 's|href="/"|href="/unnamedgame/"|g' wwwroot/index.html
+          sed -i 's|navManager.NavigateTo("/game/0/"|navManager.NavigateTo("/unnamedgame/game/0/"|g' Pages/LobbyPage.razor
+          sed -i 's|navManager.NavigateTo("/game/1/"|navManager.NavigateTo("/unnamedgame/game/1/"|g' Pages/LobbyPage.razor
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -am "Update paths for GitHub Pages"
+          git push origin githubactions --force
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' # Adjust if using a different version
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Publish Blazor WebAssembly
+        run: dotnet publish -c Release -o published --nologo
+
+      - name: Prepare convertedpublish Branch
+        run: |
+          git checkout --orphan convertedpublish
+          git rm -rf .
+          mv published/wwwroot/* .
+          touch .nojekyll
+          git add .
+          git commit -m "Deploy Blazor WebAssembly to convertedpublish"
+          git push origin convertedpublish --force
