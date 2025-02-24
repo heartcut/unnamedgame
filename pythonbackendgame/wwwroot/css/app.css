@@ -254,19 +254,19 @@ healthbubbledead {
 }
 
 #p1 {
-    cursor: url(/unnamedgame/Assets/bcurs.png) -2 -2,auto;
+    cursor: url(/Assets/bcurs.png) -2 -2,auto;
 }
 
 #p2 {
-    cursor: url(/unnamedgame/Assets/rcurs.png) -2 -2,auto;
+    cursor: url(/Assets/rcurs.png) -2 -2,auto;
 }
 
 #p3 {
-    cursor: url(/unnamedgame/Assets/gcurs.png) -2 -2,auto;
+    cursor: url(/Assets/gcurs.png) -2 -2,auto;
 }
 
 #p4 {
-    cursor: url(/unnamedgame/Assets/ycurs.png) -2 -2,auto;
+    cursor: url(/Assets/ycurs.png) -2 -2,auto;
 }
 
 

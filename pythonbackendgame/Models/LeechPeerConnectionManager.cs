@@ -5,6 +5,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.PeerJS;
 using System;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace pythonbackendgame.Models
 {
@@ -15,12 +16,13 @@ namespace pythonbackendgame.Models
         private List<DataConnection> connections = new();
         private string myId;
         private string connectId;
+        private LeechSendModel LDM;
 
         public event Action<MainDataModel>? OnDataReceived;
         public event Action<string>? OnPeerConnected;
         public event Action? OnPeerDisconnected;
 
-        public LeechPeerConnectionManager(string myId, string connectId, MainDataModel MDM)
+        public LeechPeerConnectionManager(string myId, string connectId, LeechSendModel LDM)
         {
             this.myId = myId;
             this.connectId = connectId;
@@ -61,7 +63,7 @@ namespace pythonbackendgame.Models
         }
         void DataConnection_OnOpen()
         {
-            SendData($"Hello from ");
+            //SendData($"Hello from ");
         }
         public void ConnectToHost()
         {
@@ -72,11 +74,14 @@ namespace pythonbackendgame.Models
             //SendData("0," + myId + ",0,0,0");
 
         }
-        public void SendData(string message)
+        public void SendData(LeechSendModel data)
         {
+            if (data == null) return;
+
+            string jsonData = JsonConvert.SerializeObject(data); // Convert object to JSON
             foreach (var conn in connections)
             {
-                conn.Send(message);
+                conn.Send(jsonData);
             }
         }
 

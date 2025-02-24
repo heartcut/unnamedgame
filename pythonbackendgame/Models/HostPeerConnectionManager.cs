@@ -19,7 +19,7 @@ namespace pythonbackendgame.Models
         private string leechplayernumber;
         private string leechpeerid;
         private MainDataModel MDM;
-        public event Action<string>? OnDataReceived;
+        public event Action<LeechSendModel>? OnDataReceived;
         public event Action<string>? OnPeerConnected;
         public event Action? OnPeerDisconnected;
 
@@ -51,8 +51,19 @@ namespace pythonbackendgame.Models
         }
         private void DataConnection_OnData(JSObject msg)
         {
-            string data = msg.JSRef!.As<string>();
-            OnDataReceived?.Invoke(data);
+            string data = msg.JSRef!.As<string>(); // Receive raw JSON string
+            try
+            {
+                LeechSendModel? receivedData = JsonConvert.DeserializeObject<LeechSendModel>(data);
+                if (receivedData != null)
+                {
+                    OnDataReceived?.Invoke(receivedData); // Notify subscribers with the object
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deserializing received data: " + ex.Message);
+            }
         }
         public void SendData(MainDataModel data)
         {

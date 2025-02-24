@@ -14,7 +14,10 @@
 </div>
 
 @code {
-
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
     [Parameter]
     public int Var1 { get; set; }
     [Parameter]
@@ -26,7 +29,7 @@
     [Parameter]
     public int playernumber { get; set; }
     [Parameter]
-    public int lobbynumber { get; set; }
+    public int playeriam { get; set; }
 
     public string done = "not yet";
     public string GetVars(int which)
@@ -44,13 +47,26 @@
     {
         switch (a)
         {
-            case 1: Var1++; //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1); 
+            case 1:
+                if (playeriam == 1) { mainDataModel.P1GameVar1++; }
+                else { lsm.GameVar1++; }
+                Var1++;
+                //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
                 break;
-            case 2: Var2++; //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1); 
+            case 2:
+                if (playeriam == 1) { mainDataModel.P1GameVar2++; }
+                else { lsm.GameVar2++; }
+                Var2++;//await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
                 break;
-            case 3: Var3++; //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1); 
+            case 3:
+                if (playeriam == 1) { mainDataModel.P1GameVar3++; }
+                else { lsm.GameVar3++; }
+                Var3++;//await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
                 break;
-            case 4: Var4++; //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1); 
+            case 4:
+                if (playeriam == 1) { mainDataModel.P4GameVar4++; }
+                else { lsm.GameVar4++; }
+                Var4++;//await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, Var1, Var2, Var3, Var4, 1);
                 break;
         }
         if (Var1 % 4 == 0 && Var2 % 4 == 0 && Var3 % 4 == 0 && Var4 % 4 == 0)

@@ -8,6 +8,7 @@ namespace pythonbackendgame.Models
         public string MyLobby { get; set; }
         public string MyCursorStyle { get; set; }
         public int PlayersInLobby { get; set; }
+        public int gamestate { get; set; }
 
         public int BrowserHeight { get; set; }
         public int BrowserWidth { get; set; }
@@ -73,8 +74,8 @@ namespace pythonbackendgame.Models
         public bool P2Present { get; set; }
         public bool P3Present { get; set; }
         public bool P4Present { get; set; }
-        public int P2ID { get; set; }
-        public int P3ID { get; set; }
-        public int P4ID { get; set; }
+        public string P2ID { get; set; }
+        public string P3ID { get; set; }
+        public string P4ID { get; set; }
     }
 }

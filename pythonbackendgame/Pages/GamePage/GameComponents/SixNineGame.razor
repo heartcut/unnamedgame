@@ -51,7 +51,12 @@
         [Parameter]
         public int playernumber { get; set; }
         [Parameter]
-        public int lobbynumber { get; set; }
+        public int playeriam { get; set; }
+        [Parameter]
+        public MainDataModel mainDataModel { get; set; }
+        [Parameter]
+        public LeechSendModel lsm { get; set; }
+
         string six = "6";
         string nine = "9";
 
@@ -65,14 +70,30 @@
                 //currently updating from db make it where if a matches a number in the array it changes to 99
                 if (x == answer1)
                 {
-                answer1 = 99;
+                    answer1 = 99;
                     int[] newvars = { 99, answer2,0,0 };
+                    if (playeriam == 1)
+                    {
+                        mainDataModel.P1GameVar1 = 99;
+                    }
+                    else
+                    {
+                        lsm.GameVar1 = 99;
+                    }
                     //await hubConnection.SendAsync("UpdateGameVars", lobbynumber,playernumber,99,answer2,0,0,0);
                 }
                 if (x == answer2)
                 {
                     answer2 = 99;
                     int[] newvars = { answer1, 99,0,0 };
+                    if(playeriam == 1)
+                    {
+                        mainDataModel.P1GameVar2 = 99;
+                    }
+                    else
+                    {
+                        lsm.GameVar2 = 99;
+                    }
                     //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, answer1, 99, 0, 0,0);
                 }
                 StateHasChanged();

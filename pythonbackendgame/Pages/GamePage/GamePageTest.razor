@@ -10,16 +10,15 @@
 
     <game-window>
         <player1window style="@MDM.ponezone">
-            <MakeSquare Var1="1" Var2="2" Var3="3" Var4="4"></MakeSquare>
+            <ActiveGameComponent playeriam="localplayernumber" mainDataModel="MDM" player="1"></ActiveGameComponent>
         </player1window>
-        <player2window style="@MDM.ponezone">
-            <ActiveGameComponent ingame="-1" playergame="1" var1="1" var2="2" var3="3" var4="4"></ActiveGameComponent>
+        <player2window style="@MDM.ptwozone">
+            <ActiveGameComponent playeriam="localplayernumber" mainDataModel="MDM" lsm="LSM" player="2"></ActiveGameComponent>
         </player2window>
-        <player3window style="@MDM.ponezone">
-            <ActiveGameComponent ingame = "1" playergame = "1" var1="1" var2="2" var3="3" var4="4"></ActiveGameComponent>
+        <player3window style="@MDM.pthreezone">
+            <ActiveGameComponent playeriam="localplayernumber" mainDataModel="MDM" lsm="LSM" player="3"></ActiveGameComponent>
         </player3window> 
-        <player4window style="@MDM.ponezone">
-            <ActiveGameComponent ingame="0" playergame="1" var1="1" var2="2" var3="3" var4="4"></ActiveGameComponent>
+        <player4window style="@MDM.pfourzone">
         </player4window>
     </game-window>
     <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;">I am code:@myid im in lobby @lobbynumber,
@@ -45,6 +44,7 @@
     protected BrowserService Service { get; set; }
 
     MainDataModel MDM = new MainDataModel();
+    LeechSendModel LSM = new LeechSendModel();
 
     //setsupdate speed in minutes
     PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.004));
@@ -57,7 +57,6 @@
     HostPeerConnectionManager? hostPeerManager;
     LeechPeerConnectionManager? leechPeerManager;
 
-    int[] datafromleeches = [2, 2,2,2,2];
 
 
     protected override void OnInitialized()
@@ -77,14 +76,18 @@
             {
                 if (localplayernumber == 7)
                 {
+                    LSM.PlayerPeerId = myid.ToString();
+                    LSM.ReasonForUpdate = "init";
                     InitSend();
+                    LSM.ReasonForUpdate = "regular";
                 }
                 Send();
             }
-            
+
             StateHasChanged();
         }
     }
+    new int[] temp = new int[5];
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -93,18 +96,23 @@
             if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
             myid = boolhost ? lobbynumber : GenerateRandomString(6);
             hostId = lobbynumber;
-
+            temp = MinigameGeneration.InitialHostGeneration(4);
+            MDM.P1Game = temp[4];
+            MDM.P1GameVar1 = temp[0];
+            MDM.P1GameVar2 = temp[1];
+            MDM.P1GameVar3 = temp[2];
+            MDM.P1GameVar4 = temp[3];
             if (boolhost)
             {
                 MDM.MyCursorStyle = "p" + 1;
                 MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
                 hostPeerManager = new HostPeerConnectionManager(myid,"",MDM,false);
                 hostPeerManager.OnDataReceived += HostHandleDataReceived;
-                StateHasChanged();
             }
             else
             { 
-                leechPeerManager = new LeechPeerConnectionManager(myid, hostId, MDM);
+
+                leechPeerManager = new LeechPeerConnectionManager(myid, hostId, LSM);
                 leechPeerManager.OnDataReceived +=LeechHandleDataReceived;
             }
         }
@@ -115,6 +123,9 @@
         //this means it is a message for assignment
         if (fromhost.ReasonForUpdate == "init"&& fromhost.SpecifyPlayerID == myid)
         {
+            LSM.ReasonForUpdate = "regular";
+            LSM.PlayerLobbyNumber = fromhost.SpecifyPlayerInit;
+
             localplayernumber = fromhost.SpecifyPlayerInit;
             MDM.MyCursorStyle = "p" + localplayernumber;
             //this is making other players zones un clickable
@@ -124,6 +135,25 @@
                 case 3: MDM.ptwozone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; break;
                 case 4: MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; break;
             }
+            if(localplayernumber==2)
+            {
+                temp = MinigameGeneration.InitialHostGeneration(0);
+                LSM.PlayerGame = temp[4];
+                LSM.GameVar1 = temp[0];
+                LSM.GameVar2 = temp[1];
+                LSM.GameVar3 = temp[2];
+                LSM.GameVar4 = temp[3];
+            }
+            else if(localplayernumber==3)
+            {
+                temp = MinigameGeneration.InitialHostGeneration(1);
+                LSM.PlayerGame = temp[4];
+                LSM.GameVar1 = temp[0];
+                LSM.GameVar2 = temp[1];
+                LSM.GameVar3 = temp[2];
+                LSM.GameVar4 = temp[3];
+            }
+            
             
         }
         else if (fromhost.ReasonForUpdate == "regular")
@@ -134,54 +164,87 @@
             {
                 MDM.P2Xcords = fromhost.P2Xcords;
                 MDM.P2Ycords = fromhost.P2Ycords;
+                MDM.P2Game = fromhost.P2Game;
+                MDM.P2GameVar1 = fromhost.P2GameVar1;
+                MDM.P2GameVar2 = fromhost.P2GameVar2;
+                MDM.P2GameVar3 = fromhost.P2GameVar3;
+                MDM.P2GameVar4 = fromhost.P2GameVar4;
             }
             else if (localplayernumber != 3)
             {
                 MDM.P3Xcords = fromhost.P3Xcords;
                 MDM.P3Ycords = fromhost.P3Ycords;
+                MDM.P3Game = fromhost.P3Game;
+                MDM.P3GameVar1 = fromhost.P3GameVar1;
+                MDM.P3GameVar2 = fromhost.P3GameVar2;
+                MDM.P3GameVar3 = fromhost.P3GameVar3;
+                MDM.P3GameVar4 = fromhost.P3GameVar4;
             }
             else if (localplayernumber != 4)
             {
                 MDM.P4Xcords = fromhost.P4Xcords;
                 MDM.P4Ycords = fromhost.P4Ycords;
             }
+            MDM.P1GameVar1 = fromhost.P1GameVar1;
+            MDM.P1GameVar2 = fromhost.P1GameVar2;
+            MDM.P1GameVar3 = fromhost.P1GameVar3;
+            MDM.P1GameVar4 = fromhost.P1GameVar4;
+            MDM.P1Game = fromhost.P1Game;
         }
         StateHasChanged();
     }
-    private void HostHandleDataReceived(string data)
+    private void HostHandleDataReceived(LeechSendModel lsm)
     {
         
         //add logic to asdsign player number here
         
-        datafromleeches = data
-        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-        .Select(messagetext => Convert.ToInt32(messagetext))
-        .ToArray();
         //this means the connection wants to be assigned a player number
-        if (datafromleeches[2] == 0)
+        
+        if (lsm.ReasonForUpdate=="init")
         {
+            if (lsm.PlayerPeerId== MDM.P2ID)
+            {
+
+            }
             MDM.PlayersInLobby++;
             MDM.SpecifyPlayerInit = MDM.PlayersInLobby+1;
-            MDM.SpecifyPlayerID = datafromleeches[1].ToString();
+            MDM.SpecifyPlayerID = lsm.PlayerPeerId;
             MDM.ReasonForUpdate = "init";
             InitHostSend();
             MDM.ReasonForUpdate = "regular";
         }
-        if (datafromleeches[0] == 2)
+        if (lsm.ReasonForUpdate == "regular")
         {
-            MDM.P2Xcords = datafromleeches[3];
-            MDM.P2Ycords = datafromleeches[4];
+            switch (lsm.PlayerLobbyNumber)
+            {
+
+                case 2:
+                    MDM.P2Xcords = lsm.PlayerXcords;
+                    MDM.P2Ycords = lsm.PlayerYcords;
+                    MDM.P2GameVar1 = lsm.GameVar1;
+                    MDM.P2GameVar2 = lsm.GameVar2;
+                    MDM.P2GameVar3 = lsm.GameVar3;
+                    MDM.P2GameVar4 = lsm.GameVar4;
+                    MDM.P2Game = lsm.PlayerGame;
+
+                    break;
+                case 3:
+                    MDM.P3Xcords = lsm.PlayerXcords;
+                    MDM.P3Ycords = lsm.PlayerYcords;
+                    MDM.P3GameVar1 = lsm.GameVar1;
+                    MDM.P3GameVar2 = lsm.GameVar2;
+                    MDM.P3GameVar3 = lsm.GameVar3;
+                    MDM.P3GameVar4 = lsm.GameVar4;
+                    MDM.P3Game = lsm.PlayerGame;
+                    break;
+                case 4:
+                    MDM.P4Xcords = lsm.PlayerXcords;
+                    MDM.P4Ycords = lsm.PlayerYcords;
+                    break;
+
+            }
         }
-        if (datafromleeches[0] == 3)
-        {
-            MDM.P3Xcords = datafromleeches[3];
-            MDM.P3Ycords = datafromleeches[4];
-        }
-        if (datafromleeches[0] == 4)
-        {
-            MDM.P4Xcords = datafromleeches[3];
-            MDM.P4Ycords = datafromleeches[4];
-        }
+        
         
         StateHasChanged();
     }
@@ -191,8 +254,13 @@
     //
     //
     
-    void Send() => leechPeerManager?.SendData(localplayernumber +","+myid+",1,"+MDM.mycursx+","+MDM.mycursy);
-    void InitSend() => leechPeerManager?.SendData("0," + myid + ",0," + MDM.mycursx + "," + MDM.mycursy);
+    //void Send() => leechPeerManager?.SendData(localplayernumber +","+myid+",1,"+MDM.mycursx+","+MDM.mycursy);
+    //void InitSend() => leechPeerManager?.SendData("0," + myid + ",0," + MDM.mycursx + "," + MDM.mycursy);
+
+
+    void Send() => leechPeerManager?.SendData(LSM);
+    void InitSend() => leechPeerManager?.SendData(LSM);
+
     void HostSend() => hostPeerManager?.SendData(MDM);
     void InitHostSend() => hostPeerManager?.SendData(MDM);
 
@@ -234,6 +302,9 @@
         //this sets curs to the coords around the center bascially
         MDM.mycursx = e.ClientX - (MDM.BrowserWidth / 2);
         MDM.mycursy = e.ClientY - (MDM.BrowserHeight / 2);
+
+        LSM.PlayerXcords = MDM.mycursx;
+        LSM.PlayerYcords = MDM.mycursy;
         if (boolhost)
         {
             MDM.P1Xcords = MDM.mycursx;
