@@ -19,8 +19,8 @@ jobs:
         run: |
           git checkout -B githubactions
           sed -i 's|href="/"|href="/unnamedgame/"|g' wwwroot/index.html
-          sed -i 's|navManager.NavigateTo("/game/0/"|navManager.NavigateTo("/unnamedgame/game/0/"|g' Pages/LobbyPage.razor
-          sed -i 's|navManager.NavigateTo("/game/1/"|navManager.NavigateTo("/unnamedgame/game/1/"|g' Pages/LobbyPage.razor
+          sed -i 's|navManager.NavigateTo("/game/0/"|navManager.NavigateTo("/unnamedgame/game/0/"|g' Pages/LobbyPage/LobbyPage.razor
+          sed -i 's|navManager.NavigateTo("/game/1/"|navManager.NavigateTo("/unnamedgame/game/1/"|g' Pages/LobbyPage/LobbyPage.razor
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git commit -am "Update paths for GitHub Pages"
