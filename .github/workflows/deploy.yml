@@ -21,8 +21,7 @@ jobs:
           sed -i 's|href="/"|href="/unnamedgame/"|g' pythonbackendgame/wwwroot/index.html
           sed -i 's|navManager.NavigateTo("/game/0/"|navManager.NavigateTo("/unnamedgame/game/0/"|g' pythonbackendgame/Pages/LobbyPage/LobbyPage.razor
           sed -i 's|navManager.NavigateTo("/game/1/"|navManager.NavigateTo("/unnamedgame/game/1/"|g' pythonbackendgame/Pages/LobbyPage/LobbyPage.razor
-          sed -i 's|cursor: url(/Assets/rainbowcurse.png) -2 -2,auto;|cursor: url(pythonbackendgame/wwwroot/Assets/rainbowcurse.png) -2 -2,auto;|g' pythonbackendgame/wwwroot/css/app.css
-          sed -i 's|cursor: url(/Assets/bcurs.png) -2 -2,auto;|cursor: url(pythonbackendgame/wwwroot/Assets/bcurs.png) -2 -2,auto;|g' pythonbackendgame/wwwroot/css/app.css
+          
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git commit -am "Update paths for GitHub Pages"
