@@ -2,11 +2,11 @@ html, body {
     background-color: black;
     color: grey;
     font-family: 'Share Tech', sans-serif;
-    cursor: url(Assets/rainbowcurse.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/rainbowcurse.png) -2 -2,auto;
 
 }
 main {
-    cursor: url(/Assets/rainbowcurse.png) -2 -2,auto;
+    cursor: url(./Assets/rainbowcurse.png) -2 -2,auto;
 }
 h1:focus {
     outline: none;
