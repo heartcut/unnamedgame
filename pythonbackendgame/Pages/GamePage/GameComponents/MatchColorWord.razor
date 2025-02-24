@@ -1,4 +1,5 @@
-﻿<h4>Click the circle when the text names the color of the circle.timer: @timer</h4>
+﻿@implements IDisposable
+<h4>Click the circle when the text names the color of the circle.timer: @timer</h4>
 @if (gamestate == 1)
 {
     <div @onclick="CheckAnswer" style="@GetCircleColor()"></div>
@@ -13,7 +14,8 @@
     <div>Wrong!</div>
 }
 @code {
-
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
     /// <summary>
     /// Var1 is the color of the circle
     /// Var2 is what color the text SAYS
@@ -40,15 +42,16 @@
 
     PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.016));
 
-    protected override void OnInitialized()
-    {
-        GameTimer();  // fire-and-forget
-    }
 
     public int gamestate = 0;
     int timer = 0;
     Random rndm = new Random();
-
+    protected override void OnInitialized()
+    {
+        gamestate = 0;
+        timer = 0;
+        GameTimer();  // fire-and-forget
+    }
     async void GameTimer()
     {
         while (await periodicTimer.WaitForNextTickAsync())
@@ -90,13 +93,24 @@
         {
             gamestate = 2;
             await Task.Delay(1000);
+            if (playeriam == 1) { mainDataModel.P1State = 0;  }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+            //StateHasChanged();
             //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
         }
         else
         {
             gamestate = 3;
             await Task.Delay(1000);
+            if (playeriam == 1) { mainDataModel.P1State = 0;  }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+            //StateHasChanged();
+            
             //await MinigameGeneration.PlayerFinishedGame(playernumber, false, lobbynumber, hubConnection);
         }
+    }
+    public void Dispose()
+    {
+        periodicTimer.Dispose();
     }
 }

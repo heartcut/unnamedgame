@@ -1,4 +1,5 @@
-﻿<h2 id="game-title">Use the buttons to turn the triangles into a square. @done</h2>
+﻿
+<h2 id="game-title">Use the buttons to turn the triangles into a square. @done</h2>
 <br />
 <div>
     <div class="arrow-up" style="transform: rotate(@GetVars(1)); transition: transform .5s;"></div>
@@ -14,6 +15,8 @@
 </div>
 
 @code {
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
     [Parameter]
     public LeechSendModel lsm { get; set; }
     [Parameter]
@@ -32,6 +35,10 @@
     public int playeriam { get; set; }
 
     public string done = "not yet";
+    protected override void OnInitialized()
+    {
+        done = "not yet";
+    }
     public string GetVars(int which)
     {
         switch (which)
@@ -73,8 +80,13 @@
         {
             done = "okay ur done kid.";
             //you finished the game
+            await Task.Delay(1000);
+            if (playeriam == 1) { mainDataModel.P1State = 0;  }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+            //StateHasChanged();
             //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
         }
+        //StateHasChanged();
     }
 
 }

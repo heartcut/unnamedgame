@@ -61,10 +61,10 @@ namespace pythonbackendgame.Models
         public int P4GameVar2 { get; set; }
         public int P4GameVar3 { get; set; }
         public int P4GameVar4 { get; set; }
-        public int P1ingame { get; set; }
-        public int P2ingame { get; set; }
-        public int P3ingame { get; set; }
-        public int P4ingame { get; set; }
+        public int P1State { get; set; }
+        public int P2State { get; set; }
+        public int P3State { get; set; }
+        public int P4State { get; set; }
         public int P1Health { get; set; }
         public int P2Health { get; set; }
         public int P3Health { get; set; }

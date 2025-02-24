@@ -13,6 +13,7 @@
         public int GameVar4 { get; set; }
         public double PlayerXcords { get; set; }
         public double PlayerYcords { get; set; }
+        public int MyState { get; set; }
 
     }
 }

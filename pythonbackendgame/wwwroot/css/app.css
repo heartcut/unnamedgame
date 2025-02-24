@@ -161,6 +161,17 @@ cant-select-zone {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
 }
+#can-select-zone {
+    -webkit-user-select: all; /* Safari */
+    -moz-user-select: all; /* Firefox */
+    -ms-user-select: all; /* IE10+/Edge */
+    user-select: all; /* Standard */
+    -webkit-touch-callout: all; /* iOS Safari */
+    -webkit-user-select: all; /* Safari */
+    -moz-user-select: all; /* Old versions of Firefox */
+    -ms-user-select: all; /* Internet Explorer/Edge */
+    user-select: all;
+}
 
 game-window {
     text-align: center;

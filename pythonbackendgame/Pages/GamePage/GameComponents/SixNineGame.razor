@@ -1,4 +1,5 @@
-﻿<h2 id="game-title">Find all the sixes</h2>
+﻿
+<h2 id="game-title">Find all the sixes</h2>
 <br />
 
 <div class="sixnine">
@@ -43,73 +44,87 @@
     <span @onclick="(() => IsSix(31))">@if (answer1 == 31 || answer2 == 31) {@six} else {@nine}</span>
 </div>
 <div class="sixnine">@status</div>
-    @code {
-        [Parameter]
-        public int answer1 { get; set; }
-        [Parameter]
-        public int answer2 { get; set; }
-        [Parameter]
-        public int playernumber { get; set; }
-        [Parameter]
-        public int playeriam { get; set; }
-        [Parameter]
-        public MainDataModel mainDataModel { get; set; }
-        [Parameter]
-        public LeechSendModel lsm { get; set; }
+@code {
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
+    [Parameter]
+    public int answer1 { get; set; }
+    [Parameter]
+    public int answer2 { get; set; }
+    [Parameter]
+    public int playernumber { get; set; }
+    [Parameter]
+    public int playeriam { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
 
-        string six = "6";
-        string nine = "9";
+    string six = "6";
+    string nine = "9";
 
-        public string status;
-        public int rightanswer = 0;
-        public int wronganswer = 0;
-        public async Task IsSix(int x)
+    public string status;
+    public int rightanswer = 0;
+    public int wronganswer = 0;
+
+    public async Task IsSix(int x)
+    {
+        if (x == answer1||x==answer2)
         {
-            if (x == answer1||x==answer2)
+            //currently updating from db make it where if a matches a number in the array it changes to 99
+            if (x == answer1)
             {
-                //currently updating from db make it where if a matches a number in the array it changes to 99
-                if (x == answer1)
+                answer1 = 99;
+                int[] newvars = { 99, answer2,0,0 };
+                if (playeriam == 1)
                 {
-                    answer1 = 99;
-                    int[] newvars = { 99, answer2,0,0 };
-                    if (playeriam == 1)
-                    {
-                        mainDataModel.P1GameVar1 = 99;
-                    }
-                    else
-                    {
-                        lsm.GameVar1 = 99;
-                    }
-                    //await hubConnection.SendAsync("UpdateGameVars", lobbynumber,playernumber,99,answer2,0,0,0);
+                    mainDataModel.P1GameVar1 = 99;
+                    //StateHasChanged();
+
                 }
-                if (x == answer2)
+                else
                 {
-                    answer2 = 99;
-                    int[] newvars = { answer1, 99,0,0 };
-                    if(playeriam == 1)
-                    {
-                        mainDataModel.P1GameVar2 = 99;
-                    }
-                    else
-                    {
-                        lsm.GameVar2 = 99;
-                    }
-                    //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, answer1, 99, 0, 0,0);
+                    lsm.GameVar1 = 99;
+                    //StateHasChanged();
                 }
-                StateHasChanged();
-                if (rightanswer == 1)
+                //await hubConnection.SendAsync("UpdateGameVars", lobbynumber,playernumber,99,answer2,0,0,0);
+            }
+            if (x == answer2)
+            {
+                answer2 = 99;
+                int[] newvars = { answer1, 99,0,0 };
+                if(playeriam == 1)
                 {
-                    status = "youwin!";
-                    //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
-                    StateHasChanged();
+                    mainDataModel.P1GameVar2 = 99;
+                    //StateHasChanged();
+                }
+                else
+                {
+                    lsm.GameVar2 = 99;
+                    //StateHasChanged();
+                }
+                //await hubConnection.SendAsync("UpdateGameVars", lobbynumber, playernumber, answer1, 99, 0, 0,0);
+            }
+            //StateHasChanged();
+            if (rightanswer == 1)
+            {
+                status = "youwin!";
+                await Task.Delay(1000);
+                if (playeriam == 1) { mainDataModel.P1State = 0; }
+                else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+                //await MinigameGeneration.PlayerFinishedGame(playernumber, true, lobbynumber, hubConnection);
+                    //StateHasChanged();
                 }
                 rightanswer++;
             }
             else if (wronganswer >= 1)
             {
                 status = "youlose";
+                await Task.Delay(1000);
+            if (playeriam == 1) { mainDataModel.P1State = 0;  }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
                 //await MinigameGeneration.PlayerFinishedGame(playernumber, false, lobbynumber, hubConnection);
-                StateHasChanged();
+                //StateHasChanged();
             }
             else
             {

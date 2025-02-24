@@ -26,6 +26,7 @@ namespace pythonbackendgame.Models
         {
             this.myId = myId;
             this.connectId = connectId;
+            this.LDM = LDM;
 
             peer = new Peer(myId);
             peer.OnOpen += Peer_OnOpen;

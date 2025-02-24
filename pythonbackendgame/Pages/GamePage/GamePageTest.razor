@@ -2,7 +2,7 @@
 @inject NavigationManager navManager
 
 <h3 style="color: yellow; left: 50%; transform: translateX(-50%); top: 50px; position: fixed;font-size:larger;">
-    Debug PANAL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber
+    Debug PANAL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber var1 @MDM.P1GameVar1 var2 @MDM.P1GameVar2 var3 @MDM.P1GameVar3 var4 @MDM.P1GameVar4 state @MDM.P1State game @MDM.P1Game url @lobbyurl
 </h3>
 <cant-select-zone @onmousemove="MyMouseMoved" id="@MDM.MyCursorStyle">
 
@@ -10,19 +10,19 @@
 
     <game-window>
         <player1window style="@MDM.ponezone">
-            <ActiveGameComponent playeriam="localplayernumber" mainDataModel="MDM" player="1"></ActiveGameComponent>
+            <ActiveGameComponent gamestate="MDM.P1State" playeriam="localplayernumber" @bind-mainDataModel="MDM" whichplayersgame="1" playergame="MDM.P1Game"></ActiveGameComponent>
         </player1window>
         <player2window style="@MDM.ptwozone">
-            <ActiveGameComponent playeriam="localplayernumber" mainDataModel="MDM" lsm="LSM" player="2"></ActiveGameComponent>
+            <ActiveGameComponent gamestate="MDM.P2State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="2" playergame="MDM.P2Game"></ActiveGameComponent>
         </player2window>
         <player3window style="@MDM.pthreezone">
-            <ActiveGameComponent playeriam="localplayernumber" mainDataModel="MDM" lsm="LSM" player="3"></ActiveGameComponent>
+            <ActiveGameComponent gamestate="MDM.P3State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="3" playergame="MDM.P3Game"></ActiveGameComponent>
         </player3window> 
         <player4window style="@MDM.pfourzone">
+            <ActiveGameComponent gamestate="MDM.P4State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="4" playergame="MDM.P4Game"></ActiveGameComponent>
         </player4window>
     </game-window>
-    <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;">I am code:@myid im in lobby @lobbynumber,
-        my id is @myid ---myid @myid--hostid @hostId--i got leaches message <button>connect</button><button @onclick="@Send">send</button></div>
+    <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;"><input value="@lobbyurl" style="width: 350px;"></div>
 
 </cant-select-zone>
 
@@ -39,7 +39,7 @@
     string myid = GenerateRandomString(6);
     string hostId = "";
     int localplayernumber = 7;
-
+    string lobbyurl = "test";
     [Inject]
     protected BrowserService Service { get; set; }
 
@@ -58,9 +58,27 @@
     LeechPeerConnectionManager? leechPeerManager;
 
 
-
     protected override void OnInitialized()
     {
+        lobbyurl = $"https://localhost:7224/game/0/{lobbynumber}";
+        boolhost = amhost == "1";
+        if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
+        myid = boolhost ? lobbynumber : GenerateRandomString(6);
+        hostId = lobbynumber;
+        
+        if (boolhost)
+        {
+            MDM.MyCursorStyle = "p" + 1;
+            MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
+            hostPeerManager = new HostPeerConnectionManager(myid, "", MDM, false);
+            hostPeerManager.OnDataReceived += HostHandleDataReceived;
+        }
+        else
+        {
+
+            leechPeerManager = new LeechPeerConnectionManager(myid, hostId, LSM);
+            leechPeerManager.OnDataReceived += LeechHandleDataReceived;
+        }
         RunTimer();  // fire-and-forget
     }
     async void RunTimer()
@@ -92,29 +110,30 @@
     {
         if (firstRender)
         {
-            boolhost = amhost == "1";
-            if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
-            myid = boolhost ? lobbynumber : GenerateRandomString(6);
-            hostId = lobbynumber;
-            temp = MinigameGeneration.InitialHostGeneration(4);
-            MDM.P1Game = temp[4];
-            MDM.P1GameVar1 = temp[0];
-            MDM.P1GameVar2 = temp[1];
-            MDM.P1GameVar3 = temp[2];
-            MDM.P1GameVar4 = temp[3];
-            if (boolhost)
-            {
-                MDM.MyCursorStyle = "p" + 1;
-                MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
-                hostPeerManager = new HostPeerConnectionManager(myid,"",MDM,false);
-                hostPeerManager.OnDataReceived += HostHandleDataReceived;
-            }
-            else
-            { 
+            // boolhost = amhost == "1";
+            // if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; }
+            // myid = boolhost ? lobbynumber : GenerateRandomString(6);
+            // hostId = lobbynumber;
+            // temp = MinigameGeneration.InitialHostGeneration();
+            // MDM.P1Game = temp[4];
+            // MDM.P1GameVar1 = temp[0];
+            // MDM.P1GameVar2 = temp[1];
+            // MDM.P1GameVar3 = temp[2];
+            // MDM.P1GameVar4 = temp[3];
+            // MDM.P1State = 1;
+            // if (boolhost)
+            // {
+            //     MDM.MyCursorStyle = "p" + 1;
+            //     MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
+            //     hostPeerManager = new HostPeerConnectionManager(myid,"",MDM,false);
+            //     hostPeerManager.OnDataReceived += HostHandleDataReceived;
+            // }
+            // else
+            // { 
 
-                leechPeerManager = new LeechPeerConnectionManager(myid, hostId, LSM);
-                leechPeerManager.OnDataReceived +=LeechHandleDataReceived;
-            }
+            //     leechPeerManager = new LeechPeerConnectionManager(myid, hostId, LSM);
+            //     leechPeerManager.OnDataReceived +=LeechHandleDataReceived;
+            // }
         }
     }
     private void LeechHandleDataReceived(MainDataModel fromhost)
@@ -135,23 +154,48 @@
                 case 3: MDM.ptwozone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; break;
                 case 4: MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; break;
             }
+            if (localplayernumber == 1)
+            {
+                temp = MinigameGeneration.InitialHostGeneration();
+                MDM.P1Game = temp[4];
+                MDM.P1GameVar1 = temp[0];
+                MDM.P1GameVar2 = temp[1];
+                MDM.P1GameVar3 = temp[2];
+                MDM.P1GameVar4 = temp[3];
+                MDM.P1State = 1;
+            }
             if(localplayernumber==2)
             {
-                temp = MinigameGeneration.InitialHostGeneration(0);
+                temp = MinigameGeneration.InitialHostGeneration();
                 LSM.PlayerGame = temp[4];
                 LSM.GameVar1 = temp[0];
                 LSM.GameVar2 = temp[1];
                 LSM.GameVar3 = temp[2];
                 LSM.GameVar4 = temp[3];
+                LSM.MyState = 1;
+                MDM.P2State = 1;
             }
             else if(localplayernumber==3)
             {
-                temp = MinigameGeneration.InitialHostGeneration(1);
+                temp = MinigameGeneration.InitialHostGeneration();
                 LSM.PlayerGame = temp[4];
                 LSM.GameVar1 = temp[0];
                 LSM.GameVar2 = temp[1];
                 LSM.GameVar3 = temp[2];
                 LSM.GameVar4 = temp[3];
+                LSM.MyState = 1;
+                MDM.P3State = 1;
+            }
+            else if (localplayernumber == 4)
+            {
+                temp = MinigameGeneration.InitialHostGeneration();
+                LSM.PlayerGame = temp[4];
+                LSM.GameVar1 = temp[0];
+                LSM.GameVar2 = temp[1];
+                LSM.GameVar3 = temp[2];
+                LSM.GameVar4 = temp[3];
+                LSM.MyState = 1;
+                MDM.P4State = 1;
             }
             
             
@@ -160,6 +204,12 @@
         {
             MDM.P1Xcords = fromhost.P1Xcords;
             MDM.P1Ycords = fromhost.P1Ycords;
+            MDM.P1GameVar1 = fromhost.P1GameVar1;
+            MDM.P1GameVar2 = fromhost.P1GameVar2;
+            MDM.P1GameVar3 = fromhost.P1GameVar3;
+            MDM.P1GameVar4 = fromhost.P1GameVar4;
+            MDM.P1Game = fromhost.P1Game;
+            MDM.P1State = fromhost.P1State;
             if (localplayernumber != 2)
             {
                 MDM.P2Xcords = fromhost.P2Xcords;
@@ -169,6 +219,7 @@
                 MDM.P2GameVar2 = fromhost.P2GameVar2;
                 MDM.P2GameVar3 = fromhost.P2GameVar3;
                 MDM.P2GameVar4 = fromhost.P2GameVar4;
+                MDM.P2State = fromhost.P2State;
             }
             else if (localplayernumber != 3)
             {
@@ -179,19 +230,22 @@
                 MDM.P3GameVar2 = fromhost.P3GameVar2;
                 MDM.P3GameVar3 = fromhost.P3GameVar3;
                 MDM.P3GameVar4 = fromhost.P3GameVar4;
+                MDM.P3State = fromhost.P3State;
             }
             else if (localplayernumber != 4)
             {
                 MDM.P4Xcords = fromhost.P4Xcords;
                 MDM.P4Ycords = fromhost.P4Ycords;
+                MDM.P4Game = fromhost.P4Game;
+                MDM.P4GameVar1 = fromhost.P4GameVar1;
+                MDM.P4GameVar2 = fromhost.P4GameVar2;
+                MDM.P4GameVar3 = fromhost.P4GameVar3;
+                MDM.P4GameVar4 = fromhost.P4GameVar4;
+                MDM.P4State = fromhost.P4State;
             }
-            MDM.P1GameVar1 = fromhost.P1GameVar1;
-            MDM.P1GameVar2 = fromhost.P1GameVar2;
-            MDM.P1GameVar3 = fromhost.P1GameVar3;
-            MDM.P1GameVar4 = fromhost.P1GameVar4;
-            MDM.P1Game = fromhost.P1Game;
+            
         }
-        StateHasChanged();
+        //StateHasChanged();
     }
     private void HostHandleDataReceived(LeechSendModel lsm)
     {
@@ -226,6 +280,7 @@
                     MDM.P2GameVar3 = lsm.GameVar3;
                     MDM.P2GameVar4 = lsm.GameVar4;
                     MDM.P2Game = lsm.PlayerGame;
+                    MDM.P2State = lsm.MyState;
 
                     break;
                 case 3:
@@ -236,17 +291,22 @@
                     MDM.P3GameVar3 = lsm.GameVar3;
                     MDM.P3GameVar4 = lsm.GameVar4;
                     MDM.P3Game = lsm.PlayerGame;
+                    MDM.P3State = lsm.MyState;
                     break;
                 case 4:
                     MDM.P4Xcords = lsm.PlayerXcords;
                     MDM.P4Ycords = lsm.PlayerYcords;
+                    MDM.P4GameVar1 = lsm.GameVar1;
+                    MDM.P4GameVar2 = lsm.GameVar2;
+                    MDM.P4GameVar3 = lsm.GameVar3;
+                    MDM.P4GameVar4 = lsm.GameVar4;
+                    MDM.P4Game = lsm.PlayerGame;
+                    MDM.P4State = lsm.MyState;
                     break;
 
             }
         }
-        
-        
-        StateHasChanged();
+        //StateHasChanged();
     }
     //
     // leech to host (from leech)

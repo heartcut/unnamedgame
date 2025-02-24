@@ -1,10 +1,59 @@
-﻿namespace pythonbackendgame.Pages.GamePage.GameComponents
+﻿using pythonbackendgame.Models;
+
+namespace pythonbackendgame.Pages.GamePage.GameComponents
 {
     public class MinigameGeneration
     {
-        public static int[] InitialHostGeneration(int whatgame)
+        public static void StartNewGameLeech(LeechSendModel lsm)
         {
+            //lsm.MyState = 0;
+            int[] tempgames = { 0, 1,4 };
             Random rndm = new Random();
+
+            int whatgame = tempgames[rndm.Next(0, 3)];
+
+
+
+            int[] tempvars = new int[4];
+            tempvars = GenerateVariables(whatgame);
+            lsm.GameVar1 = tempvars[0];
+            lsm.GameVar2 = tempvars[1];
+            lsm.GameVar3 = tempvars[2];
+            lsm.GameVar4 = tempvars[3];
+            lsm.PlayerGame = whatgame;
+            //return lsm;
+            //return new[] { tempvars[0], tempvars[1], tempvars[2], tempvars[3], whatgame };
+        }
+        public static void StartNewGameHost(MainDataModel mdm)
+        {
+            //mdm.P1State = 0;
+            int[] tempgames = { 0, 1,4 };
+            Random rndm = new Random();
+
+            int whatgame = tempgames[rndm.Next(0, 3)];
+
+
+
+            int[] tempvars = new int[4];
+            tempvars = GenerateVariables(whatgame);
+            mdm.P1GameVar1 = tempvars[0];
+            mdm.P1GameVar2 = tempvars[1];
+            mdm.P1GameVar3 = tempvars[2];
+            mdm.P1GameVar4 = tempvars[3];
+            mdm.P1Game = whatgame;
+
+            //return mdm;
+            //return new[] { tempvars[0], tempvars[1], tempvars[2], tempvars[3], whatgame };
+        }
+        public static int[] InitialHostGeneration()
+        {
+            int[] tempgames = {0, 1,4};
+            Random rndm = new Random();
+
+            int whatgame = tempgames[rndm.Next(0, 3)];
+
+
+
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
             return new[] { tempvars[0], tempvars[1], tempvars[2], tempvars[3], whatgame };

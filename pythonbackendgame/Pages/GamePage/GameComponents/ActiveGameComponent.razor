@@ -1,25 +1,25 @@
-﻿@if (ingame == 1)
+﻿@if (gamestate == 1)
 {
     if (playergame == 0)
     {
         if (playeriam == 1)
         {
-            <SixNineGame playeriam="1" playernumber="player" answer1="var1" answer2="var2" mainDataModel="mainDataModel" />
+            <SixNineGame playeriam="1" playernumber="whichplayersgame" answer1="var1" answer2="var2" @bind-mainDataModel="mainDataModel" />
         }
         else
         {
-            <SixNineGame playernumber="player" answer1="var1" answer2="var2" lsm="lsm" />
+            <SixNineGame playeriam="playeriam" playernumber="whichplayersgame" answer1="var1" answer2="var2" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
         }
     }
     else if (playergame == 1)
     {
         if (playeriam == 1)
         {
-            <MakeSquare playeriam="1" playernumber="player" Var1="var1" Var2="var2" Var3="var3" Var4="var4" mainDataModel="mainDataModel" />
+            <MakeSquare playeriam="1" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-mainDataModel="mainDataModel" />
         }
         else
         {
-            <MakeSquare playernumber="player" Var1="var1" Var2="var2" Var3="var3" Var4="var4" lsm="lsm" />
+            <MakeSquare playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
         }
     }
     else if (playergame == 2)
@@ -33,168 +33,129 @@
     {
         if (playeriam == 1)
         {
-            <MatchColorWord playeriam="1" playernumber="player" Var1="var1" Var2="var2" Var3="var3" Var4="var4" mainDataModel="mainDataModel" />
+            <MatchColorWord playeriam="1" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-mainDataModel="mainDataModel" />
         }
         else
         {
-            <MatchColorWord playernumber="player" Var1="var1" Var2="var2" Var3="var3" Var4="var4" lsm="lsm" />
+            <MatchColorWord playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
         }
+
+    }
+    else if (playergame == -1)
+    {
+       <div>nothin</div>
 
     }
     else
     {
     }
 }
-@if (ingame == 0)
+else
 {
-    <div>Loading next game</div>
+    <PlaceholderGame whichplayersgame="whichplayersgame" playeriam="playeriam" answer1="1" answer2="2" @bind-leechsm="lsm" @bind-mainDataModel="mainDataModel" />
 }
-@if (ingame == -1)
-{
-    <div>oh no im dead</div>
-}
+
 
 @code {
+    
 
-
-    public int playergame = 0;
-    public int ingame = 0;
     int var1 =1;
     int var2 =1;
     int var3 =0;
     int var4 =0;
-
-
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
+    [Parameter]
+    public int? gamestate { get; set; }
     [Parameter]
     public MainDataModel mainDataModel { get; set; }
     [Parameter]
     public LeechSendModel lsm { get; set; }
     [Parameter]
-    public int player { get; set; }
+    public int whichplayersgame { get; set; }
     [Parameter]
     public int playeriam { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    [Parameter]
+    public int playergame { get; set; }
+    protected override void OnParametersSet()
     {
-
-        switch (playeriam)
+        //lsm.MyPlayerNumber = playeriam;
+        switch(playeriam)
         {
             case 1:
-                if (mainDataModel.P1Game != null)
+                switch (whichplayersgame)
                 {
-                    switch (player)
-                    {
-                        case 1:
-                            ingame = 1;
-                            playergame = mainDataModel.P1Game;
-                            var1 = mainDataModel.P1GameVar1;
-                            var2 = mainDataModel.P1GameVar2;
-                            var3 = mainDataModel.P1GameVar3;
-                            var4 = mainDataModel.P1GameVar4;
-                            break;
-                        case 2: 
-                            ingame = 1;
-                            playergame = mainDataModel.P2Game;
-                            var1 = mainDataModel.P2GameVar1;
-                            var2 = mainDataModel.P2GameVar2;
-                            var3 = mainDataModel.P2GameVar3;
-                            var4 = mainDataModel.P2GameVar4;
-                            break;
-                        case 3: 
-                            ingame = 1;
-                            playergame = mainDataModel.P3Game;
-                            var1 = mainDataModel.P3GameVar1;
-                            var2 = mainDataModel.P3GameVar2;
-                            var3 = mainDataModel.P3GameVar3;
-                            var4 = mainDataModel.P3GameVar4;
-                            break;
-                        case 4:
-                            ingame = 1;
-                            playergame = mainDataModel.P4Game;
-                            var1 = mainDataModel.P4GameVar1;
-                            var2 = mainDataModel.P4GameVar2;
-                            var3 = mainDataModel.P4GameVar3;
-                            var4 = mainDataModel.P4GameVar4;
-                            break;
-                    }
+                    case 1:
+                        var1 = mainDataModel.P1GameVar1; var2 = mainDataModel.P1GameVar2; var3 = mainDataModel.P1GameVar3; var4 = mainDataModel.P1GameVar4;
+                        break;
+                    case 2:
+                        var1 = mainDataModel.P2GameVar1;var2 = mainDataModel.P2GameVar2; var3 = mainDataModel.P2GameVar3;var4 = mainDataModel.P2GameVar4;
+                        playergame = mainDataModel.P2Game; gamestate = mainDataModel.P2State;
+                        break;
+                    case 3:
+                        var1 = mainDataModel.P3GameVar1;var2 = mainDataModel.P3GameVar2;var3 = mainDataModel.P3GameVar3;var4 = mainDataModel.P3GameVar4;
+                        gamestate = mainDataModel.P3State; playergame = mainDataModel.P3Game;
+                        break;
+                    case 4:
+                        var1 = mainDataModel.P4GameVar1;var2 = mainDataModel.P4GameVar2;var3 = mainDataModel.P4GameVar3;var4 = mainDataModel.P4GameVar4;
+                        playergame = mainDataModel.P4Game; gamestate = mainDataModel.P4State;
+                        break;
                 }
-                break;
+            break;
             case 2: case 3: case 4:
-                if (mainDataModel.P1Game != null)
-                {
-                    switch (player)
-                    {
-                        case 1: 
-                            ingame = 1;
-                            playergame = mainDataModel.P1Game;
-                            var1 = mainDataModel.P1GameVar1;
-                            var2 = mainDataModel.P1GameVar2;
-                            var3 = mainDataModel.P1GameVar3;
-                            var4 = mainDataModel.P1GameVar4;
-                            break;
-                        case 2:
-                            if(playeriam!=2)
-                            {
-                                ingame = 1;
-                                playergame = mainDataModel.P2Game;
-                                var1 = mainDataModel.P2GameVar1;
-                                var2 = mainDataModel.P2GameVar2;
-                                var3 = mainDataModel.P2GameVar3;
-                                var4 = mainDataModel.P2GameVar4;
-                            }
-                            else
-                            {
-                                ingame = 1;
-                                playergame = lsm.PlayerGame;
-                                var1 = lsm.GameVar1;
-                                var2 = lsm.GameVar2;
-                                var3 = lsm.GameVar3;
-                                var4 = lsm.GameVar4;
-                            }
-                            break;
-                        case 3:
-                            if (playeriam != 3)
-                            {
-                                ingame = 1;
-                                playergame = mainDataModel.P3Game;
-                                var1 = mainDataModel.P3GameVar1;
-                                var2 = mainDataModel.P3GameVar2;
-                                var3 = mainDataModel.P3GameVar3;
-                                var4 = mainDataModel.P3GameVar4;
-                            }
-                            else
-                            {
-                                ingame = 1;
-                                playergame = lsm.PlayerGame;
-                                var1 = lsm.GameVar1;
-                                var2 = lsm.GameVar2;
-                                var3 = lsm.GameVar3;
-                                var4 = lsm.GameVar4;
-                            }
-                            break;
-                        case 4:
-                            if (playeriam != 4)
-                            {
-                                ingame = 1;
-                                playergame = mainDataModel.P4Game;
-                                var1 = mainDataModel.P4GameVar1;
-                                var2 = mainDataModel.P4GameVar2;
-                                var3 = mainDataModel.P4GameVar3;
-                                var4 = mainDataModel.P4GameVar4;
-                            }
-                            else
-                            {
-                                ingame = 1;
-                                playergame = lsm.PlayerGame;
-                                var1 = lsm.GameVar1;
-                                var2 = lsm.GameVar2;
-                                var3 = lsm.GameVar3;
-                                var4 = lsm.GameVar4;
-                            }
-                            break;
-                    }
-                }
+            switch (whichplayersgame)
+            {
+                case 1:
+                    gamestate = mainDataModel.P1State; playergame = mainDataModel.P1Game;
+                    var1 = mainDataModel.P1GameVar1;var2 = mainDataModel.P1GameVar2;var3 = mainDataModel.P1GameVar3;var4 = mainDataModel.P1GameVar4;
                 break;
+                case 2:
+                    if (playeriam != 2)
+                    {
+                        gamestate = mainDataModel.P2State;playergame = mainDataModel.P2Game;
+                        var1 = mainDataModel.P2GameVar1; var2 = mainDataModel.P2GameVar2;var3 = mainDataModel.P2GameVar3;var4 = mainDataModel.P2GameVar4;
+                    }
+                    else
+                    {
+                        var1 = lsm.GameVar1;var2 = lsm.GameVar2;var3 = lsm.GameVar3;var4 = lsm.GameVar4;
+                        playergame = lsm.PlayerGame;gamestate = lsm.MyState;
+                    }
+                break;
+                case 3:
+                    if (playeriam != 3)
+                    {
+                        gamestate = mainDataModel.P3State;playergame = mainDataModel.P3Game;
+                        var1 = mainDataModel.P3GameVar1;var2 = mainDataModel.P3GameVar2;var3 = mainDataModel.P3GameVar3; var4 = mainDataModel.P3GameVar4;
+                    }
+                    else
+                    {
+                        gamestate = lsm.MyState; playergame = lsm.PlayerGame;
+                        var1 = lsm.GameVar1;var2 = lsm.GameVar2;var3 = lsm.GameVar3;var4 = lsm.GameVar4;
+                    }
+                break;
+                case 4:
+                    if (playeriam != 4)
+                    {
+                        gamestate = mainDataModel.P4State;playergame = mainDataModel.P4Game;
+                        var1 = mainDataModel.P4GameVar1;var2 = mainDataModel.P4GameVar2;var3 = mainDataModel.P4GameVar3;var4 = mainDataModel.P4GameVar4;
+                    }
+                    else
+                    {
+                        gamestate = lsm.MyState;playergame = lsm.PlayerGame;
+                        var1 = lsm.GameVar1;var2 = lsm.GameVar2;var3 = lsm.GameVar3;var4 = lsm.GameVar4;
+                    }
+                break;
+            }
+            break;
         }
+    } 
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            
+        }
+        
     }
 }
