@@ -6,7 +6,7 @@ html, body {
 
 }
 main {
-    cursor: url(./Assets/rainbowcurse.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/rainbowcurse.png) -2 -2,auto;
 }
 h1:focus {
     outline: none;
