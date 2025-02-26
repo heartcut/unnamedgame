@@ -55,6 +55,17 @@
             <MatchColorWord playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
         }
     }
+    else if (playergame == 5)
+    {
+        if (playeriam == 1)
+        {
+            <DragCircle playeriam="1" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-mainDataModel="mainDataModel" />
+        }
+        else
+        {
+            <DragCircle playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
+        }
+    }
 }
 else
 {

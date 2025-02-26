@@ -438,3 +438,13 @@ healthbubbledead {
 .flex-basis-50 {
     flex-basis: 50%;
 }
+
+/*------------------DRAGCIRCLE-------------*/
+
+.draggable-circle {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
+}

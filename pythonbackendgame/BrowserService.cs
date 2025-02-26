@@ -16,11 +16,24 @@ namespace pythonbackendgame
         {
             return await _js.InvokeAsync<BrowserDimension>("getDimensions");
         }
+
+        public async Task<ElementRect> GetElementRect(string element)
+        {
+            return await _js.InvokeAsync<ElementRect>("getElementRect", element);
+        }
     }
 
     public class BrowserDimension
     {
         public int Width { get; set; }
         public int Height { get; set; }
+    }
+
+    public class ElementRect
+    {
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Top { get; set; }
+        public int Left { get; set; }
     }
 }

@@ -1,0 +1,57 @@
+﻿
+<h2 id="game-title">Drag the circle to the end of the maze</h2>
+<br />
+<div id="myContainer" @onmousemove="OnMouseMove" style="position: relative; width:500px; height:500px; border:1px solid black;">
+    <p>Cursor relative to container: (@mouseX, @mouseY)</p>
+    <!-- You can position elements here using the mouse coordinates -->
+</div>
+
+@code {
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
+    [Parameter]
+    public int Var1 { get; set; }
+    [Parameter]
+    public int Var2 { get; set; }
+    [Parameter]
+    public int Var3 { get; set; }
+    [Parameter]
+    public int Var4 { get; set; }
+    [Parameter]
+    public int playernumber { get; set; }
+    [Parameter]
+    public int playeriam { get; set; }
+
+    [Inject]
+    protected BrowserService Service { get; set; }
+    private double mouseX;
+    private double mouseY;
+
+    // This method is triggered whenever the mouse moves inside the container
+    private async Task OnMouseMove(MouseEventArgs e)
+    {
+        // Get the container's bounding rectangle via JS interop
+        var rect = await Service.GetElementRect("myContainer");
+        if (rect == null) return;
+
+        // Calculate the relative position by subtracting the container's top and left
+        mouseX = e.ClientX - rect.Left;
+        mouseY = e.ClientY - rect.Top;
+
+        // Optionally call StateHasChanged() if needed (usually not required in event callbacks)
+    }
+
+    // A simple class to match the returned object from getElementRect
+    public class DOMRect
+    {
+        public double left { get; set; }
+        public double top { get; set; }
+        public double width { get; set; }
+        public double height { get; set; }
+    }
+}
+}
