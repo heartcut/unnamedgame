@@ -4,12 +4,17 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
 {
     public class MinigameGeneration
     {
+        //0-sixnine
+        //1-makeasquare
+        //2-memorizecolornumber
+        //3-memorizecolorshape
+        //4-matchcolorword
+        static int[] tempgames = { 2};
         public static void StartNewGameLeech(LeechSendModel lsm)
         {
-            int[] tempgames = { 0, 1,4 };
             Random rndm = new Random();
 
-            int whatgame = tempgames[rndm.Next(0, 3)];
+            int whatgame = tempgames[rndm.Next(0, tempgames.Length)];
 
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
@@ -22,10 +27,9 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
         public static void StartNewGameHost(MainDataModel mdm)
         {
             //mdm.P1State = 0;
-            int[] tempgames = { 0, 1,4 };
             Random rndm = new Random();
 
-            int whatgame = tempgames[rndm.Next(0, 3)];
+            int whatgame = tempgames[rndm.Next(0, tempgames.Length)];
 
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
@@ -37,9 +41,8 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
         }
         public static int[] InitialHostGeneration()
         {
-            int[] tempgames = {0, 1,4};
             Random rndm = new Random();
-            int whatgame = tempgames[rndm.Next(0, 3)];
+            int whatgame = tempgames[rndm.Next(0, tempgames.Length)];
 
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
@@ -56,11 +59,12 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
                 //just needs to generate 2 random numbers between 0-31 which will be where the 6s are
                 int first = rndm.Next(0, 32);
                 int second = rndm.Next(0, 32);
+                int which = rndm.Next(0, 2);
                 while (first == second)
                 {
                     second = rndm.Next(0, 32);
                 }
-                return new[] { first, second, 0, 0 };
+                return new[] { first, second, which, 0 };
             }
             if (whatgame == 1)
             {
@@ -76,7 +80,7 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
             }
             if (whatgame == 3)
             {
-                //memorizeshapenumber
+                //memorizecolorshape
                 //[colors,shapes,questoin1or2,answer]
                 return new[] { rndm.Next(1, 10), rndm.Next(1, 10), rndm.Next(0, 2), rndm.Next(0, 4) };
             }

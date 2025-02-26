@@ -1,9 +1,9 @@
 ﻿@implements IDisposable
-<h4>Click the circle when the text names the color of the circle.timer: @timer</h4>
+<h4>Click the circle when the text names the color of the circle. @timer</h4>
 @if (gamestate == 1)
 {
     <div @onclick="CheckAnswer" style="@GetCircleColor()"></div>
-    <div style="color:@colors[Var3];">@colors[Var2]</div>
+    <div style=" font-weight:bolder; color:@colors[Var3];">@colors[Var2]</div>
 }
 @if (gamestate == 2)
 {
@@ -56,7 +56,7 @@
         while (await periodicTimer.WaitForNextTickAsync())
         {
             timer++;
-            if (timer > 2 && gamestate != 1 && gamestate != 2 && gamestate != 3)
+            if (timer > 1 && gamestate != 1 && gamestate != 2 && gamestate != 3)
             {
                 gamestate = 1;
             }

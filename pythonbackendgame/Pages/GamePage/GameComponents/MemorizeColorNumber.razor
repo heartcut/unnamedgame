@@ -1,0 +1,146 @@
+﻿@implements IDisposable
+
+<h2 id="game-title">Remember the colors and the numbers. @timer</h2>
+
+@if (gamestate == 1) //first screen with numbers and boxes
+{
+    <div>
+        <button class="memorizeelement" style=background-color:@colors[0]>@numbers[0]</button>
+        <button class="memorizeelement" style=background-color:@colors[1]>@numbers[1]</button>
+        <button class="memorizeelement" style=background-color:@colors[2]>@numbers[2]</button>
+    </div>
+}
+@if (gamestate == 2) //Short Screen saying to think carefully or something
+{
+    <div>Remember</div>
+}
+@if (gamestate == 3) //screen with question and answer choices //question what color was the box with the number 7?
+{
+    <p>What color was the box with number @numbers[Var4]?</p>
+
+    <button class="memorizeelementwords" @onclick="(() => CheckAnswer(1))">@colors[1]</button>
+    <button class="memorizeelementwords" @onclick="(() => CheckAnswer(2))">@colors[2]</button>
+    <button class="memorizeelementwords" @onclick="(() => CheckAnswer(0))">@colors[0]</button>
+}
+@if (gamestate == 4)//question what number was in the blue box?
+{
+    <p>What number was in the @colors[Var4] box? </p>
+
+    <button class="memorizeelement" @onclick="(() => CheckAnswer(1))">@numbers[1]</button>
+    <button class="memorizeelement" @onclick="(() => CheckAnswer(2))">@numbers[2]</button>
+    <button class="memorizeelement" @onclick="(() => CheckAnswer(0))">@numbers[0]</button>
+}
+@if (gamestate == 5)
+{
+    <div>Correct!</div>
+}
+@if (gamestate == 6)
+{
+    <div>Wrong!</div>
+}
+
+@code {
+    //[colors,numbers,questoin1or2,answer]
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
+
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
+    [Parameter]
+    public int Var1 { get; set; }
+    [Parameter]
+    public int Var2 { get; set; }
+    [Parameter]
+    public int Var3 { get; set; }
+    [Parameter]
+    public int Var4 { get; set; }
+    [Parameter]
+    public int playernumber { get; set; }
+    [Parameter]
+    public int playeriam { get; set; }
+
+    public string[] colors;
+    public int[] numbers;
+
+
+    PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.023));
+
+    public int gamestate = 0;
+    int timer = 0;
+    Random rndm = new Random();
+    protected override void OnInitialized()
+    {
+        gamestate = 1;
+        switch (Var1)
+        {
+            case 1: colors = new string[] { "red", "blue", "green" }; break;
+            case 2: colors = new string[] { "yellow", "blue", "green" }; break;
+            case 3: colors = new string[] { "red", "yellow", "green" }; break;
+            case 4: colors = new string[] { "red", "yellow", "blue" }; break;
+            case 5: colors = new string[] { "green", "blue", "red" }; break;
+            case 6: colors = new string[] { "red", "green", "yellow" }; break;
+            case 7: colors = new string[] { "blue", "red", "yellow" }; break;
+            case 8: colors = new string[] { "blue", "green", "yellow" }; break;
+            case 9: colors = new string[] { "blue", "yellow", "green" }; break;
+        }
+        switch (Var2)
+        {
+            case 1: numbers = new int[] { 1, 2, 3 }; break;
+            case 2: numbers = new int[] { 2, 3, 4 }; break;
+            case 3: numbers = new int[] { 4, 5, 6 }; break;
+            case 4: numbers = new int[] { 6, 5, 4 }; break;
+            case 5: numbers = new int[] { 8, 7, 6 }; break;
+            case 6: numbers = new int[] { 9, 0, 3 }; break;
+            case 7: numbers = new int[] { 4, 6, 5 }; break;
+            case 8: numbers = new int[] { 3, 6, 7 }; break;
+            case 9: numbers = new int[] { 6, 0, 9 }; break;
+        }
+        timer = 0;
+        GameTimer();
+    }
+    async void GameTimer()
+    {
+        while (await periodicTimer.WaitForNextTickAsync())
+        {
+            // Only update state if game isn't finished
+            if (gamestate < 4)
+            {
+                timer++;
+                if (timer > 1 && gamestate != 1 && gamestate != 2 && gamestate != 3)
+                {
+                    gamestate = 2;
+                }
+                if (timer > 3 && timer <= 4)
+                {
+
+                    if (Var3 == 0) { gamestate = 3; }
+                    else { gamestate = 4; }
+                }
+                
+            }
+        }
+    }
+    public async Task CheckAnswer(int answer)
+    {
+        if (answer == Var4)
+        {
+            gamestate = 5;
+            await Task.Delay(1000);
+            if (playeriam == 1) { mainDataModel.P1State = 0; }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+        }
+        else
+        {
+            gamestate = 6;
+            await Task.Delay(1000);
+            if (playeriam == 1) { mainDataModel.P1State = 0; }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+        }
+    }
+    public void Dispose()
+    {
+        periodicTimer.Dispose();
+    }
+}

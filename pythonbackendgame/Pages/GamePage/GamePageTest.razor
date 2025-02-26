@@ -11,15 +11,21 @@
     <game-window>
         <player1window style="@MDM.ponezone">
             <ActiveGameComponent gamestate="MDM.P1State" playeriam="localplayernumber" @bind-mainDataModel="MDM" whichplayersgame="1" playergame="MDM.P1Game"></ActiveGameComponent>
+            <PlayerHealthBar myhealth="1" playercolor="blue" />
+
         </player1window>
         <player2window style="@MDM.ptwozone">
             <ActiveGameComponent gamestate="MDM.P2State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="2" playergame="MDM.P2Game"></ActiveGameComponent>
+            <PlayerHealthBar myhealth="2" playercolor="red" />
+
         </player2window>
         <player3window style="@MDM.pthreezone">
             <ActiveGameComponent gamestate="MDM.P3State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="3" playergame="MDM.P3Game"></ActiveGameComponent>
+            <PlayerHealthBar myhealth="3" playercolor="green" />
         </player3window> 
         <player4window style="@MDM.pfourzone">
             <ActiveGameComponent gamestate="MDM.P4State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="4" playergame="MDM.P4Game"></ActiveGameComponent>
+            <PlayerHealthBar myhealth="4" playercolor="yellow" />
         </player4window>
     </game-window>
     <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;"><input value="@lobbyurl" style="width: 350px;"></div>

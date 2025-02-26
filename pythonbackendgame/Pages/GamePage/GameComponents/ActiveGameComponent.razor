@@ -4,11 +4,11 @@
     {
         if (playeriam == 1)
         {
-            <SixNineGame playeriam="1" playernumber="whichplayersgame" answer1="var1" answer2="var2" @bind-mainDataModel="mainDataModel" />
+            <SixNineGame playeriam="1" playernumber="whichplayersgame" answer1="var1" answer2="var2" answer3="var3" @bind-mainDataModel="mainDataModel" />
         }
         else
         {
-            <SixNineGame playeriam="playeriam" playernumber="whichplayersgame" answer1="var1" answer2="var2" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
+            <SixNineGame playeriam="playeriam" playernumber="whichplayersgame" answer1="var1" answer2="var2" answer3="var3" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
         }
     }
     else if (playergame == 1)
@@ -24,9 +24,25 @@
     }
     else if (playergame == 2)
     {
+        if (playeriam == 1)
+        {
+            <MemorizeColorNumber playeriam="1" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-mainDataModel="mainDataModel" />
+        }
+        else
+        {
+            <MemorizeColorNumber playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
+        }
     }
     else if (playergame == 3)
     {
+        if (playeriam == 1)
+        {
+            <MemorizeColorShape playeriam="1" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-mainDataModel="mainDataModel" />
+        }
+        else
+        {
+            <MemorizeColorShape playeriam="playeriam" playernumber="whichplayersgame" Var1="var1" Var2="var2" Var3="var3" Var4="var4" @bind-lsm="lsm" @bind-mainDataModel="mainDataModel" />
+        }
     }
     else if (playergame == 4)
     {
@@ -47,10 +63,10 @@ else
 
 @code {
 
-    int var1 =1;
-    int var2 =1;
-    int var3 =0;
-    int var4 =0;
+    int var1 = 99;
+    int var2 = 99;
+    int var3 = 99;
+    int var4 = 99;
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
     [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
     [Parameter]

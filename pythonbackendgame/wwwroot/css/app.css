@@ -197,6 +197,7 @@ player1window {
     top: 2px;
     border: 2px solid grey;
     /*    cursor: url(/media/bcurs.png) -2 -2,auto;*/
+    background-image: linear-gradient(to top left, blue, black 20%);
 }
 
 player2window {
@@ -208,6 +209,7 @@ player2window {
     border: 2px solid grey;
     /*    cursor: url(/media/rcurs.png) -2 -2,auto;*/
     color: white;
+    background-image: linear-gradient(to top right, red, black 20%);
 }
 
 player3window {
@@ -219,6 +221,7 @@ player3window {
     border: 2px solid grey;
     /*    cursor: url(/media/gcurs.png) -2 -2,auto;*/
     color: white;
+    background-image: linear-gradient(to bottom left, green, black 20%);
 }
 
 player4window {
@@ -230,6 +233,8 @@ player4window {
     border: 2px solid grey;
     /*    cursor: url(/media/ycurs.png) -2 -2,auto;*/
     color: white;
+    background-image: linear-gradient(to bottom right, yellow, black 20%);
+    animation: glow 5s ease infinite;
 }
 
 .playerhealth {
@@ -282,7 +287,7 @@ healthbubbledead {
 
 
 /*--------------minigames-------------------------*/
-.sixnine {
+    .sixnine {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Old versions of Firefox */
@@ -390,4 +395,46 @@ healthbubbledead {
 #game-title {
     text-align: center;
     color: white;
+}
+/*memorize color number-----------------------------------------*/
+
+.memorizeelement {
+    width: 75px;
+    height: 75px;
+    color: white;
+    font-size: 50px;
+    font-weight: 900;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+.memorizeelementwords {
+    width: 75px;
+    height: 75px;
+    color: white;
+    font-size: 15px;
+    font-weight: 900;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+/*------------------MEMORIZE COLRO AND SHAPE-------------*/
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 85px;
+}
+
+.flex-row {
+    flex-direction: row;
+    padding: 10px;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-basis-50 {
+    flex-basis: 50%;
 }
