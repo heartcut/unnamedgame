@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace pythonbackendgame
 {
@@ -17,9 +18,9 @@ namespace pythonbackendgame
             return await _js.InvokeAsync<BrowserDimension>("getDimensions");
         }
 
-        public async Task<ElementRect> GetElementRect(string element)
+        public async Task<ElementLocation> GetElementRect(string element)
         {
-            return await _js.InvokeAsync<ElementRect>("getElementRect", element);
+            return await _js.InvokeAsync<ElementLocation>("GetElementLocation", element);
         }
     }
 
@@ -29,11 +30,11 @@ namespace pythonbackendgame
         public int Height { get; set; }
     }
 
-    public class ElementRect
+    public class ElementLocation
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int Top { get; set; }
-        public int Left { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double Top { get; set; }
+        public double Left { get; set; }
     }
 }

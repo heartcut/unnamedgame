@@ -33,15 +33,20 @@
                 height: window.innerHeight
             };
         };
-        window.getElementRect = (elementId) => {
-            const el = document.getElementById(elementId);
-            if (!el) return null;
-            const rect = el.getBoundingClientRect();
+        window.GetElementLocation = function (elementId) {
+            var element = document.getElementById(elementId);
+            if (!element) {
+                console.error("Element with ID '" + elementId + "' not found.");
+                return null;
+            }
+
+            var rect = element.getBoundingClientRect();
+
             return {
-                left: rect.left,
-                top: rect.top,
-                width: rect.width,
-                height: rect.height
+                Width: rect.width,
+                Height: rect.height,
+                Top: rect.top + window.scrollY,  // Adjust for scrolling
+                Left: rect.left + window.scrollX // Adjust for scrolling
             };
         };
 

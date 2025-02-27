@@ -1,10 +1,22 @@
-﻿
+﻿@implements IDisposable
 <h2 id="game-title">Drag the circle to the end of the maze</h2>
 <br />
-<div id="myContainer" @onmousemove="OnMouseMove" style="position: relative; width:500px; height:500px; border:1px solid black;">
-    <p>Cursor relative to container: (@mouseX, @mouseY)</p>
-    <!-- You can position elements here using the mouse coordinates -->
-</div>
+@if (gamestate == 1)
+{
+    <div id="@whichplayerwindow" @onmousemove="OnMouseMove" style="top:-25px;position: relative; width:545px; height:225px; border:1px solid yellow;">
+        <draggable-circle style="position: absolute; left:@circleX; top:@circleY;z-index:3;"></draggable-circle>
+        <!-- You can position elements here using the mouse coordinates -->
+    </div>
+}
+@if (gamestate == 2)
+{
+    <div>Correct!</div>
+}
+@if (gamestate == 3)
+{
+    <div>Wrong!</div>
+}
+
 
 @code {
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
@@ -30,28 +42,30 @@
     protected BrowserService Service { get; set; }
     private double mouseX;
     private double mouseY;
+    private string circleX;
+    private string circleY;
 
+    public int gamestate = 0;
+    public string whichplayerwindow = "";
+    protected override void OnInitialized()
+    {
+        whichplayerwindow = playernumber + "window"; 
+        gamestate = 1;
+    }
     // This method is triggered whenever the mouse moves inside the container
     private async Task OnMouseMove(MouseEventArgs e)
     {
-        // Get the container's bounding rectangle via JS interop
-        var rect = await Service.GetElementRect("myContainer");
-        if (rect == null) return;
+        var elementRect = await Service.GetElementRect("myContainer");
 
-        // Calculate the relative position by subtracting the container's top and left
-        mouseX = e.ClientX - rect.Left;
-        mouseY = e.ClientY - rect.Top;
+        double var1 = e.ClientX - elementRect.Left; // Mouse X relative to myContainer
+        double var2 = e.ClientY - elementRect.Top;  // Mouse Y relative to myContainer
+        circleX = $"{Convert.ToInt32(var1)}px";
+        circleY = $"{Convert.ToInt32(var2)}px";
+        //StateHasChanged(); // Update the UI
 
         // Optionally call StateHasChanged() if needed (usually not required in event callbacks)
     }
-
-    // A simple class to match the returned object from getElementRect
-    public class DOMRect
+    public void Dispose()
     {
-        public double left { get; set; }
-        public double top { get; set; }
-        public double width { get; set; }
-        public double height { get; set; }
     }
-}
 }
