@@ -1,4 +1,4 @@
-﻿
+﻿@implements IDisposable
 
 @if(answer3!=null && answer3==0)
 {
@@ -119,4 +119,7 @@ else{}
                 wronganswer++;
             }
         }
+    public void Dispose()
+    {
     }
+}

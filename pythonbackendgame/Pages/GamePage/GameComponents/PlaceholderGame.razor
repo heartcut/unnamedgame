@@ -20,12 +20,15 @@
     {
         Console.WriteLine($"[OnParametersSet] Player {playeriam} - before: p1game={mainDataModel.P1Game}");
         await Task.Delay(2000);
-
-        if (whichplayersgame == 1) { MinigameGeneration.StartNewGameHost(mainDataModel); mainDataModel.P1State = 1; }
-
-        if (leechsm != null)
+        if(whichplayersgame==playeriam)
         {
-            if (whichplayersgame == 2 || whichplayersgame == 3 || whichplayersgame == 4) { MinigameGeneration.StartNewGameLeech(leechsm); leechsm.MyState = 1; switch (playeriam) { case 2: mainDataModel.P2State = 1; break; case 3: mainDataModel.P3State = 1; break; case 4: mainDataModel.P4State = 1; break; } }
+            if (playeriam == 1) { MinigameGeneration.StartNewGameHost(mainDataModel); mainDataModel.P1State = 1; }
+
+            if (leechsm != null)
+            {
+                if (playeriam == 2 || playeriam == 3 || playeriam == 4) { MinigameGeneration.StartNewGameLeech(leechsm); leechsm.MyState = 1; switch (playeriam) { case 2: mainDataModel.P2State = 1; break; case 3: mainDataModel.P3State = 1; break; case 4: mainDataModel.P4State = 1; break; } }
+            }
+            
         }
         Console.WriteLine($"[OnParametersSet] Player {playeriam} - After: p1game={mainDataModel.P1Game}");
     }

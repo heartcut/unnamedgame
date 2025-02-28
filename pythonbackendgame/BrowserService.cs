@@ -22,6 +22,11 @@ namespace pythonbackendgame
         {
             return await _js.InvokeAsync<ElementLocation>("GetElementLocation", element);
         }
+        public async Task PlaySound()
+        {
+            // Call the JavaScript function to play the sound
+            await _js.InvokeVoidAsync("playClickSound");
+        }
     }
 
     public class BrowserDimension

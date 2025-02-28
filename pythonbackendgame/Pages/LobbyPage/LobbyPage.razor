@@ -7,11 +7,12 @@
 <lobby-window >
     <div>Host Lobby <div><button @onclick=@HostLobby> Go</button></div></div>
     <div>Join Lobby <div><input placeholder="lobby id here" style="width: 350px;" @bind=@lobbynumber></input><div><button @onclick=@GoToLobby> Go</button></div></div></div>
+
 </lobby-window>
 
 
 @code {
-
+    
     string lobbynumber = "";
     //
     void GoToLobby(string lobbynumber)

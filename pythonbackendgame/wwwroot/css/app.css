@@ -197,7 +197,7 @@ player1window {
     top: 2px;
     border: 2px solid grey;
     /*    cursor: url(/media/bcurs.png) -2 -2,auto;*/
-    background-image: linear-gradient(to top left, blue, black 20%);
+    background-image: linear-gradient(to top left, blue, black 5%);
 }
 
 player2window {
@@ -209,7 +209,7 @@ player2window {
     border: 2px solid grey;
     /*    cursor: url(/media/rcurs.png) -2 -2,auto;*/
     color: white;
-    background-image: linear-gradient(to top right, red, black 20%);
+    background-image: linear-gradient(to top right, red, black 5%);
 }
 
 player3window {
@@ -221,7 +221,7 @@ player3window {
     border: 2px solid grey;
     /*    cursor: url(/media/gcurs.png) -2 -2,auto;*/
     color: white;
-    background-image: linear-gradient(to bottom left, green, black 20%);
+    background-image: linear-gradient(to bottom left, green, black 5%);
 }
 
 player4window {
@@ -233,7 +233,7 @@ player4window {
     border: 2px solid grey;
     /*    cursor: url(/media/ycurs.png) -2 -2,auto;*/
     color: white;
-    background-image: linear-gradient(to bottom right, yellow, black 20%);
+    background-image: linear-gradient(to bottom right, yellow, black 5%);
     animation: glow 5s ease infinite;
 }
 
@@ -442,9 +442,8 @@ healthbubbledead {
 /*------------------DRAGCIRCLE-------------*/
 
 draggable-circle {
-    width: 50px;
-    height: 50px;
-    background-color: red;
+    width: 24px;
+    height: 24px;
+    background-color: white;
     border-radius: 50%;
-    cursor: pointer;
 }

@@ -140,11 +140,11 @@ else
     {
         while (await periodicTimer.WaitForNextTickAsync())
         {
-            if (memorizetimer > 4 && memorizetimer <= 6)
+            if (memorizetimer > 3 && memorizetimer <= 5)
             {
                 gamestate = 1;
             }
-            if (memorizetimer > 6 &&gamestate!=2 &&gamestate!=3&&gamestate!=4)
+            if (memorizetimer > 5 &&gamestate!=2 &&gamestate!=3&&gamestate!=4)
             {
                 gamestate = 2;
             }
