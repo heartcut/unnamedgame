@@ -1,0 +1,71 @@
+﻿<h2 id="game-title">Click on the circles with your color. Start with the lowest number. Wait for your turn.</h2>
+<br />
+
+<div style="position: relative; width: 400px; height: 400px; border: 1px solid black;">
+    @foreach (var circle in mainDataModel.Circles)
+    {
+        <div @onclick="(() => ClickedCircle(circle.Number))" class="circle" style="top:@GenPX(circle.Y); left:@GenPX(circle.X); background-color: @GetCircleColor(circle.Number);">@circle.Number</div>
+    }
+</div>
+
+@code {
+    [Parameter] 
+    public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter]
+    public EventCallback<LeechSendModel> lsmChanged { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
+    [Parameter]
+    public int playeriam { get; set; }
+    string mycolor = "";
+
+    private Random random = new();
+
+    protected override void OnInitialized()
+    {
+        switch(playeriam)
+        {
+            case 1: mycolor = "blue"; break;
+            case 2: mycolor = "red"; break;
+            case 3: mycolor = "green"; break;
+            case 4: mycolor = "yellow"; break;
+        }
+    }
+    void ClickedCircle(int number)
+    {
+
+        if (GetCircleColor(number) == mycolor)
+        {
+            if (number == (mainDataModel.currentteamgamenumber + 1)) 
+            {
+                lsm.CirclesIClicked.Add(number);
+                lsm.lastnumbericlicked = number;
+                //mainDataModel.Circles.RemoveAll(circle => circle.Number == number);
+            }
+        }//correct
+        else { }
+        
+    }
+    string GetCircleColor(int number)
+    {
+        // Default color if the number doesn't match
+        string[] colors = new string[] { "blue", "red", "green", "yellow" };
+
+        // If the number of players is less than or equal to the number of colors
+        if (mainDataModel.PlayersInLobby >= 2 && mainDataModel.PlayersInLobby <= 4)
+        {
+            // Return color based on the player's number
+            return colors[(number - 1) % mainDataModel.PlayersInLobby];
+        }
+
+        // If there are more than 4 players, default to red or any color
+        return "red";
+    }
+    string GenPX(double value)
+    {
+        return Convert.ToInt32(value).ToString() + "px";
+    }
+    
+}

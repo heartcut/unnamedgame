@@ -2,7 +2,7 @@
 @inject NavigationManager navManager
 
 <h3 style="color: yellow; left: 50%; transform: translateX(-50%); top: 50px; position: fixed;font-size:larger;">
-    Debug PANEL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber
+    Debug PANEL Lobby @lobbynumber Players in lobby @MDM.PlayersInLobby I am @localplayernumber teamgamenumber=@MDM.currentteamgamenumber
 </h3>
 @if (MDM.gamestate == 0)
 {
@@ -11,34 +11,52 @@
 @if (MDM.gamestate == 1)
 {
     <div style="color:green;">> Game Started</div>
+
+}
+@if (MDM.gamestate == 2)
+{
+    <div style="color:green;">> GAMESTATE2</div>
 }
 <cant-select-zone @onmousemove="MyMouseMoved" id="@MDM.MyCursorStyle">
 
     <PlayerCursors MDM="MDM" />
+    @if (MDM.gamestate == 0 | MDM.gamestate == 1)
+    {
+        <game-window>
+            <player1window style="@MDM.ponezone">
+                <ActiveGameComponent gamestate="MDM.P1State" playeriam="localplayernumber" @bind-mainDataModel="MDM" whichplayersgame="1" playergame="MDM.P1Game"></ActiveGameComponent>
+                <PlayerHealthBar myhealth="MDM.P1Health" playercolor="blue" />
 
-    <game-window>
-        <player1window style="@MDM.ponezone">
-            <ActiveGameComponent gamestate="MDM.P1State" playeriam="localplayernumber" @bind-mainDataModel="MDM" whichplayersgame="1" playergame="MDM.P1Game"></ActiveGameComponent>
-            <PlayerHealthBar myhealth="MDM.P1Health" playercolor="blue" />
+            </player1window>
+            <player2window style="@MDM.ptwozone">
+                <ActiveGameComponent gamestate="MDM.P2State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="2" playergame="MDM.P2Game"></ActiveGameComponent>
+                <PlayerHealthBar myhealth="MDM.P2Health" playercolor="red" />
 
-        </player1window>
-        <player2window style="@MDM.ptwozone">
-            <ActiveGameComponent gamestate="MDM.P2State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="2" playergame="MDM.P2Game"></ActiveGameComponent>
-            <PlayerHealthBar myhealth="MDM.P2Health" playercolor="red" />
+            </player2window>
+            <player3window style="@MDM.pthreezone">
+                <ActiveGameComponent gamestate="MDM.P3State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="3" playergame="MDM.P3Game"></ActiveGameComponent>
+                <PlayerHealthBar myhealth="MDM.P3Health" playercolor="green" />
+            </player3window>
+            <player4window style="@MDM.pfourzone">
+                <ActiveGameComponent gamestate="MDM.P4State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="4" playergame="MDM.P4Game"></ActiveGameComponent>
+                <PlayerHealthBar myhealth="MDM.P4Health" playercolor="yellow" />
+            </player4window>
+        </game-window>
+    }
+    @if (MDM.gamestate==2)
+    {
+        <game-window>
+            <ActiveTeamGameComponent @bind-mainDataModel="MDM" @bind-lsm="LSM" playeriam="localplayernumber"></ActiveTeamGameComponent>
 
-        </player2window>
-        <player3window style="@MDM.pthreezone">
-            <ActiveGameComponent gamestate="MDM.P3State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="3" playergame="MDM.P3Game"></ActiveGameComponent>
-            <PlayerHealthBar myhealth="MDM.P3Health" playercolor="green" />
-        </player3window> 
-        <player4window style="@MDM.pfourzone">
-            <ActiveGameComponent gamestate="MDM.P4State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="4" playergame="MDM.P4Game"></ActiveGameComponent>
-            <PlayerHealthBar myhealth="MDM.P4Health" playercolor="yellow" />
-        </player4window>
-    </game-window>
+
+        </game-window>
+    }
+
     @if (boolhost)
     {
         <button @onclick=@StartGame style="left: 50%; transform: translateX(-50%); bottom: 40px; position: fixed;font-size:larger;">Start game as host</button>
+
+        @* <button @onclick=@StartGameTest style="left: 50%; transform: translateX(-30%); bottom: 40px; position: fixed;font-size:larger;">cheat health</button> *@
 
     }
     <div style="color: yellow; left: 50%; transform: translateX(-50%); bottom: 20px; position: fixed;font-size:larger;"><input value="@lobbyurl" style="width: 350px;"></div>
@@ -46,35 +64,31 @@
 </cant-select-zone>
 
 @code {
-    static Random rndm = new Random();
-    int first = rndm.Next(0, 32);
-    int second = rndm.Next(0, 32);
     [Parameter]
     public string amhost { get; set; }
     [Parameter]
     public string lobbynumber { get; set; }
+    [Inject]
+    protected BrowserService Service { get; set; }
+    [Inject] BlazorJSRuntime JS { get; set; }
+
+    MainDataModel MDM = new MainDataModel();
+    LeechSendModel LSM = new LeechSendModel();
+
+    HostPeerConnectionManager? hostPeerManager;
+    LeechPeerConnectionManager? leechPeerManager;
+
+    PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.004));
 
     bool boolhost = false;
     string myid = GenerateRandomString(6);
     string hostId = "";
     int localplayernumber = 7;
-    [Inject]
-    protected BrowserService Service { get; set; }
-
-    MainDataModel MDM = new MainDataModel();
-    LeechSendModel LSM = new LeechSendModel();
+    private string lobbyurl;
 
     int STARTINGHEALTH = 8;
 
     //setsupdate speed in minutes
-    PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.004));
-
-    [Inject] BlazorJSRuntime JS { get; set; }
-
-    HostPeerConnectionManager? hostPeerManager;
-    LeechPeerConnectionManager? leechPeerManager;
-
-    private string lobbyurl;
 
     protected override void OnInitialized()
     {
@@ -85,12 +99,14 @@
         MDM.gamestate = 0;
 
         boolhost = amhost == "1";
-        if (boolhost) { MDM.MyPlayerNumber = 1; MDM.PlayersInLobby = 0; MDM.P1Health = STARTINGHEALTH; }
         myid = boolhost ? lobbynumber : GenerateRandomString(6);
         hostId = lobbynumber;
 
         if (boolhost)
         {
+            MDM.MyPlayerNumber = 1;
+            MDM.PlayersInLobby = 1;
+            MDM.P1Health = STARTINGHEALTH;
             MDM.MyCursorStyle = "p" + 1;
             MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
             hostPeerManager = new HostPeerConnectionManager(myid, "", MDM, false);
@@ -111,6 +127,7 @@
             {
                 localplayernumber = 1;
                 HostSend();
+                gamestatecheck();
             }
             else if (!boolhost)
             {
@@ -123,7 +140,6 @@
                 }
                 Send();
             }
-
             StateHasChanged();
         }
     }
@@ -134,8 +150,78 @@
     void HostSend() => hostPeerManager?.SendData(MDM);
     void InitHostSend() => hostPeerManager?.SendData(MDM);
 
-    new int[] temp = new int[5];
+    void gamestatecheck()
+    {
+        if (MDM.gamestate == 1)
+        {
+            switch (MDM.PlayersInLobby)
+            {
+                case 2: if (MDM.P1Health == 12 && MDM.P2Health == 12) { StartTeamGame(); } break;
+                case 3: if (MDM.P1Health == 12 && MDM.P2Health == 12 && MDM.P3Health == 12) { StartTeamGame(); } break;
+                case 4: if (MDM.P1Health == 12 && MDM.P2Health == 12 && MDM.P3Health == 12 && MDM.P4Health == 12) { StartTeamGame(); } break;
+            }
+        }
+        if(MDM.gamestate==2)
+        {
+            MDM.UpdateCircles(LSM.CirclesIClicked,MDM);
+            if (LSM.CirclesIClicked.Contains(12)) { FinishTeamGame(); }
+            if (LSM.lastnumbericlicked > MDM.currentteamgamenumber) { MDM.currentteamgamenumber = LSM.lastnumbericlicked; }
+            switch (MDM.PlayersInLobby)
+            {
+                case 2:
+                    MDM.UpdateCircles(MDM.Circlesp2clicked, MDM);
+                    if (MDM.Circlesp2clicked.Contains(12)) { FinishTeamGame(); }
+                    break;
+                case 3:
+                    MDM.UpdateCircles(MDM.Circlesp2clicked, MDM);
+                    MDM.UpdateCircles(MDM.Circlesp3clicked, MDM);
+                    if (MDM.Circlesp2clicked.Contains(12)) { FinishTeamGame(); }
+                    if (MDM.Circlesp3clicked.Contains(12)) { FinishTeamGame(); }
+                    break;
+                case 4:
+                    MDM.UpdateCircles(MDM.Circlesp2clicked, MDM);
+                    MDM.UpdateCircles(MDM.Circlesp3clicked, MDM);
+                    MDM.UpdateCircles(MDM.Circlesp4clicked, MDM);
+                    if (MDM.Circlesp2clicked.Contains(12)) { FinishTeamGame(); }
+                    if (MDM.Circlesp3clicked.Contains(12)) { FinishTeamGame(); }
+                    if (MDM.Circlesp4clicked.Contains(12)) { FinishTeamGame(); }
+                    break;
+            }
+        }
+    }
+    void StartGame()
+    {
+        MDM.gamestate = 1;
+        gamestatecheck();
+    }
+    void StartGameTest()
+    {
+        MDM.P1Health = 12;
+        MDM.P2Health = 12;
+        MDM.P3Health = 12;
+        MDM.P4Health = 12;
 
+        gamestatecheck();
+    }
+    void StartTeamGame()
+    {
+        MDM.Circles = MinigameGeneration.GenerateCircles();
+        MDM.gamestate = 2;
+    }
+    void FinishTeamGame()
+    {
+        MDM.P1Health = STARTINGHEALTH;
+        MDM.P2Health = STARTINGHEALTH;
+        MDM.P3Health = STARTINGHEALTH;
+        MDM.P4Health = STARTINGHEALTH;
+        MDM.P1State = 0;
+        MDM.P2State = 0;
+        MDM.P3State = 0;
+        MDM.P4State = 0;
+
+        MDM.gamestate = 1;
+        Console.WriteLine("you finished game");
+    }
     private void LeechHandleDataReceived(MainDataModel fromhost)
     {
         //this means it is a message for assignment
@@ -143,7 +229,6 @@
         {
             LSM.ReasonForUpdate = "regular";
             LSM.PlayerLobbyNumber = fromhost.SpecifyPlayerInit;
-
             localplayernumber = fromhost.SpecifyPlayerInit;
             MDM.MyCursorStyle = "p" + localplayernumber;
             //this is making other players zones un clickable
@@ -153,7 +238,8 @@
                 case 3: MDM.ptwozone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; MDM.P3Health = STARTINGHEALTH; break;
                 case 4: MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.P4Health = STARTINGHEALTH; break;
             }
-            temp = MinigameGeneration.InitialHostGeneration();
+
+            int[] temp = MinigameGeneration.InitialHostGeneration();
             LSM.PlayerGame = temp[4];
             LSM.GameVar1 = temp[0];
             LSM.GameVar2 = temp[1];
@@ -161,57 +247,10 @@
             LSM.GameVar4 = temp[3];
             LSM.MyState = 1;
             LSM.MyHealth = STARTINGHEALTH;
-            
         }
         else if (fromhost.ReasonForUpdate == "regular")
         {
-            MDM.P1Xcords = fromhost.P1Xcords;
-            MDM.P1Ycords = fromhost.P1Ycords;
-            MDM.P1GameVar1 = fromhost.P1GameVar1;
-            MDM.P1GameVar2 = fromhost.P1GameVar2;
-            MDM.P1GameVar3 = fromhost.P1GameVar3;
-            MDM.P1GameVar4 = fromhost.P1GameVar4;
-            MDM.P1Game = fromhost.P1Game;
-            MDM.P1State = fromhost.P1State;
-            MDM.P1Health = fromhost.P1Health;
-            MDM.gamestate = fromhost.gamestate;
-            if (localplayernumber != 2)
-            {
-                MDM.P2Xcords = fromhost.P2Xcords;
-                MDM.P2Ycords = fromhost.P2Ycords;
-                MDM.P2Game = fromhost.P2Game;
-                MDM.P2GameVar1 = fromhost.P2GameVar1;
-                MDM.P2GameVar2 = fromhost.P2GameVar2;
-                MDM.P2GameVar3 = fromhost.P2GameVar3;
-                MDM.P2GameVar4 = fromhost.P2GameVar4;
-                MDM.P2State = fromhost.P2State;
-                MDM.P2Health = fromhost.P2Health;
-
-            }
-            else if (localplayernumber != 3)
-            {
-                MDM.P3Xcords = fromhost.P3Xcords;
-                MDM.P3Ycords = fromhost.P3Ycords;
-                MDM.P3Game = fromhost.P3Game;
-                MDM.P3GameVar1 = fromhost.P3GameVar1;
-                MDM.P3GameVar2 = fromhost.P3GameVar2;
-                MDM.P3GameVar3 = fromhost.P3GameVar3;
-                MDM.P3GameVar4 = fromhost.P3GameVar4;
-                MDM.P3State = fromhost.P3State;
-                MDM.P3Health = fromhost.P3Health;
-            }
-            else if (localplayernumber != 4)
-            {
-                MDM.P4Xcords = fromhost.P4Xcords;
-                MDM.P4Ycords = fromhost.P4Ycords;
-                MDM.P4Game = fromhost.P4Game;
-                MDM.P4GameVar1 = fromhost.P4GameVar1;
-                MDM.P4GameVar2 = fromhost.P4GameVar2;
-                MDM.P4GameVar3 = fromhost.P4GameVar3;
-                MDM.P4GameVar4 = fromhost.P4GameVar4;
-                MDM.P4State = fromhost.P4State;
-                MDM.P4Health = fromhost.P4Health;
-            }
+            MDM.RegularUpdateFromHost(fromhost,MDM,localplayernumber);
         }
         //StateHasChanged();
     }
@@ -222,7 +261,7 @@
         if (lsm.ReasonForUpdate=="init")
         {
             MDM.PlayersInLobby++;
-            MDM.SpecifyPlayerInit = MDM.PlayersInLobby+1;
+            MDM.SpecifyPlayerInit = MDM.PlayersInLobby;
             MDM.SpecifyPlayerID = lsm.PlayerPeerId;
             MDM.ReasonForUpdate = "init";
             InitHostSend();
@@ -230,49 +269,12 @@
         }
         if (lsm.ReasonForUpdate == "regular")
         {
-            switch (lsm.PlayerLobbyNumber)
-            {
-                case 2:
-                    MDM.P2Xcords = lsm.PlayerXcords;
-                    MDM.P2Ycords = lsm.PlayerYcords;
-                    MDM.P2GameVar1 = lsm.GameVar1;
-                    MDM.P2GameVar2 = lsm.GameVar2;
-                    MDM.P2GameVar3 = lsm.GameVar3;
-                    MDM.P2GameVar4 = lsm.GameVar4;
-                    MDM.P2Game = lsm.PlayerGame;
-                    MDM.P2State = lsm.MyState;
-                    MDM.P2Health = lsm.MyHealth;
-                    break;
-                case 3:
-                    MDM.P3Xcords = lsm.PlayerXcords;
-                    MDM.P3Ycords = lsm.PlayerYcords;
-                    MDM.P3GameVar1 = lsm.GameVar1;
-                    MDM.P3GameVar2 = lsm.GameVar2;
-                    MDM.P3GameVar3 = lsm.GameVar3;
-                    MDM.P3GameVar4 = lsm.GameVar4;
-                    MDM.P3Game = lsm.PlayerGame;
-                    MDM.P3State = lsm.MyState;
-                    MDM.P3Health = lsm.MyHealth;
-                    break;
-                case 4:
-                    MDM.P4Xcords = lsm.PlayerXcords;
-                    MDM.P4Ycords = lsm.PlayerYcords;
-                    MDM.P4GameVar1 = lsm.GameVar1;
-                    MDM.P4GameVar2 = lsm.GameVar2;
-                    MDM.P4GameVar3 = lsm.GameVar3;
-                    MDM.P4GameVar4 = lsm.GameVar4;
-                    MDM.P4Game = lsm.PlayerGame;
-                    MDM.P4State = lsm.MyState;
-                    MDM.P4Health = lsm.MyHealth;
-                    break;
-            }
+            MDM.RegularUpdateFromLeech(lsm, MDM);
         }
+        
         //StateHasChanged();
     }
-    void StartGame()
-    {
-        MDM.gamestate = 1;
-    }
+   
     public void Dispose()
     {
         if (!boolhost)

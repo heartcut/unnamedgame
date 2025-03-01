@@ -1,4 +1,7 @@
 ﻿using pythonbackendgame.Models;
+using static pythonbackendgame.Pages.GamePage.GameComponents.TeamGameComponents.ActiveTeamGameComponent;
+using System;
+using static pythonbackendgame.Models.MainDataModel;
 
 namespace pythonbackendgame.Pages.GamePage.GameComponents
 {
@@ -48,6 +51,53 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
             int[] tempvars = new int[4];
             tempvars = GenerateVariables(whatgame);
             return new[] { tempvars[0], tempvars[1], tempvars[2], tempvars[3], whatgame };
+        }
+
+        private static Random random = new Random();
+        private static double CircleRadius = 20;  // Half the width/height of the circle
+        private static double MinDistance = 40;   // Minimum distance between circle centers
+
+        public static List<Circle> GenerateCircles()
+        {
+            var circles = new List<Circle>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                Circle newCircle;
+
+                // Try generating a new position until no overlap is detected
+                do
+                {
+                    newCircle = new Circle
+                    {
+                        Number = i,
+                        X = random.Next(0, 400),  // Random X position
+                        Y = random.Next(0, 400)   // Random Y position
+                    };
+                }
+                while (IsOverlapping(newCircle, circles));
+
+                // Add the non-overlapping circle to the list
+                circles.Add(newCircle);
+            }
+
+            return circles;
+        }
+
+        // Check if the new circle overlaps with any existing circle
+        private static bool IsOverlapping(Circle newCircle, List<Circle> existingCircles)
+        {
+            foreach (var circle in existingCircles)
+            {
+                double distance = Math.Sqrt(Math.Pow(newCircle.X - circle.X, 2) + Math.Pow(newCircle.Y - circle.Y, 2));
+
+                // If the distance between centers is less than the minimum distance, they overlap
+                if (distance < MinDistance)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         //this will take in what game it is and return an array of the proper variables for the game
         //will return in the form [var1,var2,var3,var4] depending on the game

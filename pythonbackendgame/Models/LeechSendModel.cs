@@ -1,4 +1,6 @@
-﻿namespace pythonbackendgame.Models
+﻿using static pythonbackendgame.Models.MainDataModel;
+
+namespace pythonbackendgame.Models
 {
     public class LeechSendModel
     {
@@ -15,6 +17,8 @@
         public double PlayerXcords { get; set; }
         public double PlayerYcords { get; set; }
         public int MyState { get; set; }
+        public int lastnumbericlicked { get; set; }
+        public List<int> CirclesIClicked = [0];
 
     }
 }
