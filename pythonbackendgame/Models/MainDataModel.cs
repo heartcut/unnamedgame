@@ -21,6 +21,58 @@ namespace pythonbackendgame.Models
             mycursy = e.ClientY - (BrowserHeight / 2);
         }
 
+        public void FinishedGame(bool won, int playeriam, MainDataModel mainDataModel, LeechSendModel lsm)
+        {
+            if(this.gamestate!=0)
+            {
+                if (won)
+                {
+                    switch (playeriam)
+                    {
+                        case 1:
+                            mainDataModel.P1Health += 1;
+                            break;
+                        case 2:
+                            lsm.MyHealth += 1;
+                            mainDataModel.P2Health += 1;
+                            break;
+                        case 3:
+                            lsm.MyHealth += 1;
+                            mainDataModel.P3Health += 1;
+                            break;
+                        case 4:
+                            lsm.MyHealth += 1;
+                            mainDataModel.P4Health += 1;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (playeriam)
+                    {
+                        case 1:
+                            mainDataModel.P1Health -= 1;
+                            break;
+                        case 2:
+                            lsm.MyHealth -= 1;
+                            mainDataModel.P2Health -= 1;
+                            break;
+                        case 3:
+                            lsm.MyHealth -= 1;
+                            mainDataModel.P3Health -= 1;
+                            break;
+                        case 4:
+                            lsm.MyHealth -= 1;
+                            mainDataModel.P4Health -= 1;
+                            break;
+                    }
+                }
+            }
+            
+            if (playeriam == 1) { mainDataModel.P1State = 0; }
+            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+        }
+
         public string ReasonForUpdate { get; set; }
         public int SpecifyPlayerInit { get; set; }
         public string SpecifyPlayerID { get; set; }

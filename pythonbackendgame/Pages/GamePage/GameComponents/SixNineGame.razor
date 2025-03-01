@@ -102,23 +102,21 @@ else{}
             {
                 status = "youwin!";
                 await Task.Delay(1000);
-                if (playeriam == 1) { mainDataModel.P1State = 0; }
-                else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
-                }
-                rightanswer++;
+                mainDataModel.FinishedGame(true, playeriam, mainDataModel, lsm);
             }
-            else if (wronganswer >= 1)
-            {
-                status = "youlose";
-                await Task.Delay(1000);
-            if (playeriam == 1) { mainDataModel.P1State = 0;  }
-            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
-            }
-            else
-            {
-                wronganswer++;
-            }
+            rightanswer++;
         }
+        else if (wronganswer >= 1)
+        {
+            status = "youlose";
+            await Task.Delay(1000);
+            mainDataModel.FinishedGame(false,playeriam,mainDataModel,lsm);
+        }
+        else
+        {
+            wronganswer++;
+        }
+    }
     public void Dispose()
     {
     }

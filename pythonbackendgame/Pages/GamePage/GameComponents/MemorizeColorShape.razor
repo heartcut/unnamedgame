@@ -111,26 +111,56 @@ else
         switch (Var1)
         {
             case 1: colors = new string[] { "red", "blue", "green", "yellow" }; break;
-            case 2: colors = new string[] { "yellow", "blue", "green", "red" }; break;
-            case 3: colors = new string[] { "red", "yellow", "green", "blue" }; break;
-            case 4: colors = new string[] { "red", "yellow", "blue", "green" }; break;
-            case 5: colors = new string[] { "green", "blue", "red", "yellow" }; break;
-            case 6: colors = new string[] { "red", "green", "yellow", "blue" }; break;
-            case 7: colors = new string[] { "blue", "red", "yellow", "green" }; break;
-            case 8: colors = new string[] { "blue", "green", "yellow", "red" }; break;
-            case 9: colors = new string[] { "blue", "yellow", "green", "red" }; break;
+            case 2: colors = new string[] { "red", "blue", "yellow", "green" }; break;
+            case 3: colors = new string[] { "red", "green", "blue", "yellow" }; break;
+            case 4: colors = new string[] { "red", "green", "yellow", "blue" }; break;
+            case 5: colors = new string[] { "red", "yellow", "blue", "green" }; break;
+            case 6: colors = new string[] { "red", "yellow", "green", "blue" }; break;
+            case 7: colors = new string[] { "blue", "red", "green", "yellow" }; break;
+            case 8: colors = new string[] { "blue", "red", "yellow", "green" }; break;
+            case 9: colors = new string[] { "blue", "green", "red", "yellow" }; break;
+            case 10: colors = new string[] { "blue", "green", "yellow", "red" }; break;
+            case 11: colors = new string[] { "blue", "yellow", "red", "green" }; break;
+            case 12: colors = new string[] { "blue", "yellow", "green", "red" }; break;
+            case 13: colors = new string[] { "green", "red", "blue", "yellow" }; break;
+            case 14: colors = new string[] { "green", "red", "yellow", "blue" }; break;
+            case 15: colors = new string[] { "green", "blue", "red", "yellow" }; break;
+            case 16: colors = new string[] { "green", "blue", "yellow", "red" }; break;
+            case 17: colors = new string[] { "green", "yellow", "red", "blue" }; break;
+            case 18: colors = new string[] { "green", "yellow", "blue", "red" }; break;
+            case 19: colors = new string[] { "yellow", "red", "blue", "green" }; break;
+            case 20: colors = new string[] { "yellow", "red", "green", "blue" }; break;
+            case 21: colors = new string[] { "yellow", "blue", "red", "green" }; break;
+            case 22: colors = new string[] { "yellow", "blue", "green", "red" }; break;
+            case 23: colors = new string[] { "yellow", "green", "red", "blue" }; break;
+            case 24: colors = new string[] { "yellow", "green", "blue", "red" }; break;
         }
         switch (Var2)
         {
-            case 1: shapes = new int[] { 1, 2, 3, 4 }; break;
-            case 2: shapes = new int[] { 2, 3, 4, 5 }; break;
-            case 3: shapes = new int[] { 4, 5, 1, 0 }; break;
-            case 4: shapes = new int[] { 0, 5, 4, 1 }; break;
-            case 5: shapes = new int[] { 5, 1, 2, 3 }; break;
-            case 6: shapes = new int[] { 3, 0, 4, 2 }; break;
-            case 7: shapes = new int[] { 0, 1, 5, 2 }; break;
-            case 8: shapes = new int[] { 3, 5, 4, 0 }; break;
-            case 9: shapes = new int[] { 3, 2, 1, 4 }; break;
+            case 1: shapes = new int[] { 0, 1, 3, 5 }; break;
+            case 2: shapes = new int[] { 2, 4, 0, 3 }; break;
+            case 3: shapes = new int[] { 1, 4, 5, 0 }; break;
+            case 4: shapes = new int[] { 3, 1, 0, 4 }; break;
+            case 5: shapes = new int[] { 2, 3, 4, 1 }; break;
+            case 6: shapes = new int[] { 0, 5, 1, 4 }; break;
+            case 7: shapes = new int[] { 4, 0, 3, 5 }; break;
+            case 8: shapes = new int[] { 1, 0, 5, 2 }; break;
+            case 9: shapes = new int[] { 2, 3, 1, 5 }; break;
+            case 10: shapes = new int[] { 5, 0, 4, 3 }; break;
+            case 11: shapes = new int[] { 3, 2, 4, 0 }; break;
+            case 12: shapes = new int[] { 1, 3, 5, 2 }; break;
+            case 13: shapes = new int[] { 4, 2, 5, 1 }; break;
+            case 14: shapes = new int[] { 0, 3, 1, 5 }; break;
+            case 15: shapes = new int[] { 2, 4, 1, 0 }; break;
+            case 16: shapes = new int[] { 5, 1, 0, 3 }; break;
+            case 17: shapes = new int[] { 3, 4, 2, 0 }; break;
+            case 18: shapes = new int[] { 1, 5, 4, 3 }; break;
+            case 19: shapes = new int[] { 0, 2, 4, 5 }; break;
+            case 20: shapes = new int[] { 4, 3, 1, 0 }; break;
+            case 21: shapes = new int[] { 2, 5, 3, 1 }; break;
+            case 22: shapes = new int[] { 0, 5, 3, 4 }; break;
+            case 23: shapes = new int[] { 1, 4, 0, 2 }; break;
+            case 24: shapes = new int[] { 3, 5, 2, 4 }; break;
         }
         gamestate = 0;
         memorizetimer = 0;
@@ -183,16 +213,14 @@ else
         {
             gamestate = 3;
             await Task.Delay(1000);
-            if (playeriam == 1) { mainDataModel.P1State = 0; }
-            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+            mainDataModel.FinishedGame(true, playeriam, mainDataModel, lsm);
             //StateHasChanged();
         }
         else
         {
             gamestate = 4;
             await Task.Delay(1000);
-            if (playeriam == 1) { mainDataModel.P1State = 0;  }
-            else { lsm.MyState = 0; switch (playeriam) { case 2: mainDataModel.P2State = 0; break; case 3: mainDataModel.P3State = 0; break; case 4: mainDataModel.P4State = 0; break; } }
+            mainDataModel.FinishedGame(false, playeriam, mainDataModel, lsm);
         //StateHasChanged();
         }
     }
