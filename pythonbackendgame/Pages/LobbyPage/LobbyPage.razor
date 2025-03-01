@@ -17,14 +17,14 @@
     //
     void GoToLobby(string lobbynumber)
     {
-        navManager.NavigateTo("/game/0/" + lobbynumber);
+        navManager.NavigateTo("/unnamedgame/game/0/" + lobbynumber);
     }
 
     void GoToLobby() => GoToLobby(lobbynumber);
 
     void HostLobby(string lobbynumber)
     {
-        navManager.NavigateTo("/game/1/" + lobbynumber);
+        navManager.NavigateTo("/unnamedgame/game/1/" + lobbynumber);
     }
 
     void HostLobby() => HostLobby(GenerateRandomString(6));
