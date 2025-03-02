@@ -13,7 +13,7 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
         //3-memorizecolorshape
         //4-matchcolorword
         //5-dragcircle
-        static int[] tempgames = { 0,1,2,3,4,5 };
+        static int[] tempgames = { 5 };
         public static void StartNewGameLeech(LeechSendModel lsm)
         {
             Random rndm = new Random();
