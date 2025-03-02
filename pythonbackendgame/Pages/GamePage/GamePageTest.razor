@@ -156,9 +156,9 @@
         {
             switch (MDM.PlayersInLobby)
             {
-                case 2: if (MDM.P1Health == 12 && MDM.P2Health == 12) { StartTeamGame(); } break;
-                case 3: if (MDM.P1Health == 12 && MDM.P2Health == 12 && MDM.P3Health == 12) { StartTeamGame(); } break;
-                case 4: if (MDM.P1Health == 12 && MDM.P2Health == 12 && MDM.P3Health == 12 && MDM.P4Health == 12) { StartTeamGame(); } break;
+                case 2: if (MDM.P1Health >= 12 && MDM.P2Health >= 12) { StartTeamGame(); } break;
+                case 3: if (MDM.P1Health >= 12 && MDM.P2Health >= 12 && MDM.P3Health >= 12) { StartTeamGame(); } break;
+                case 4: if (MDM.P1Health >= 12 && MDM.P2Health >= 12 && MDM.P3Health >= 12 && MDM.P4Health >= 12) { StartTeamGame(); } break;
             }
         }
         if(MDM.gamestate==2)
