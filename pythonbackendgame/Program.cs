@@ -34,3 +34,8 @@ await builder.Build().RunAsync();
 //git add .
 //git commit -m "Fix base href for GitHub Pages"
 //git push origin gh-pages --force
+
+
+//TODO:
+//number colors are always in order
+//cursors not in middle.

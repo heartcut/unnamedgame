@@ -107,15 +107,16 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
             if (whatgame == 0)
             {
                 //sixninegame
-                //just needs to generate 2 random numbers between 0-31 which will be where the 6s are
-                int first = rndm.Next(0, 32);
-                int second = rndm.Next(0, 32);
-                int which = rndm.Next(0, 2);
-                while (first == second)
+                //just needs to generate 4 random numbers between 0-133 which will be where the 6s or 9s are
+                int first, second, third, fourth;
+                do
                 {
-                    second = rndm.Next(0, 32);
-                }
-                return new[] { first, second, which, 0 };
+                    first = rndm.Next(0, 133);
+                    second = rndm.Next(0, 133);
+                    third = rndm.Next(0, 133);
+                    fourth = rndm.Next(0, 133);
+                } while (first == second || first == third || first == fourth || second == third || second == fourth || third == fourth);
+                return new[] { first, second, third, fourth };
             }
             if (whatgame == 1)
             {

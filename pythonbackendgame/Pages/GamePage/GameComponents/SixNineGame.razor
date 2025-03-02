@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
 
-@if(answer3!=null && answer3==0)
+@if(issix!=null && issix)
 {
     <h2 id="game-title">Find all the sixes</h2>
     <br />
@@ -13,13 +13,13 @@
             {
                 @if (i < totalNumbers)
                 {
-                    <span @onclick="(() => IsSix(i))">@((answer1 == i || answer2 == i) ? six : nine)</span>
+                    <span @onclick="(() => IsSix(i))">@((answer1 == i || answer2 == i || answer3 == i || answer4 == i) ? six : nine)</span>
                 }
             }
         </div>
     }
 }
-else if (answer3 != null && answer3 == 1)
+else if (issix != null && !issix)
 {
     <h2 id="game-title">Find all the nines</h2>
     <br />
@@ -31,7 +31,7 @@ else if (answer3 != null && answer3 == 1)
             {
                 @if (i < totalNumbers)
                 {
-                    <span @onclick="(() => IsSix(i))">@((answer1 == i || answer2 == i) ? nine : six)</span>
+                    <span @onclick="(() => IsSix(i))">@((answer1 == i || answer2 == i || answer3 == i || answer4 == i) ? nine : six)</span>
                 }
             }
         </div>
@@ -41,10 +41,11 @@ else{}
 
 <div class="sixnine">@status</div>
 @code {
-    private int columns = 8; // Number of columns per row
-    private int totalNumbers = 32; // Total number of elements
+    private int columns = 19; // Number of columns per row
+    private int totalNumbers = 133; // Total number of elements
 
 
+    bool issix;
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
     [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
     [Parameter]
@@ -52,7 +53,9 @@ else{}
     [Parameter]
     public int answer2 { get; set; }
     [Parameter]
-    public int? answer3 { get; set; } = 2;
+    public int answer3 { get; set; }
+    [Parameter]
+    public int answer4 { get; set; }
     [Parameter]
     public int playernumber { get; set; }
     [Parameter]
@@ -65,46 +68,87 @@ else{}
     string six = " 6 ";
     string nine = " 9 ";
 
+    Random random = new Random();
+
     public string status;
     public int rightanswer = 0;
     public int wronganswer = 0;
+    int answers;
+    protected override void OnInitialized()
+    {
+        if(answer1%2==0)
+        {
+            issix = true;
+        }
+        else{ issix = false; }
+        if(answer2+answer3%2==0)
+        {
+            answers = 3;
+        }
+        else { answers = 4; }
+    }
+
 
     public async Task IsSix(int x)
     {
-        if (x == answer1||x==answer2)
+        if (x == answer1 || x == answer2 || x == answer3 || x == answer4)
         {
+            rightanswer++;
             //currently updating from db make it where if a matches a number in the array it changes to 99
             if (x == answer1)
             {
                 answer1 = 99;
                 if (playeriam == 1)
                 {
-                    mainDataModel.P1GameVar1 = 99;
+                    mainDataModel.P1GameVar1 = 135;
                 }
                 else
                 {
-                    lsm.GameVar1 = 99;
+                    lsm.GameVar1 = 135;
                 }
             }
             if (x == answer2)
             {
-                answer2 = 99;
+                answer2 = 135;
                 if(playeriam == 1)
                 {
-                    mainDataModel.P1GameVar2 = 99;
+                    mainDataModel.P1GameVar2 = 135;
                 }
                 else
                 {
-                    lsm.GameVar2 = 99;
+                    lsm.GameVar2 = 135;
                 }
             }
-            if (rightanswer == 1)
+            if (x == answer3)
+            {
+                answer3 = 135;
+                if (playeriam == 1)
+                {
+                    mainDataModel.P1GameVar3 = 135;
+                }
+                else
+                {
+                    lsm.GameVar3 = 135;
+                }
+            }
+            if (x == answer4)
+            {
+                answer4 = 135;
+                if (playeriam == 1)
+                {
+                    mainDataModel.P1GameVar4 = 135;
+                }
+                else
+                {
+                    lsm.GameVar4 = 135;
+                }
+            }
+            if (rightanswer == answers)
             {
                 status = "youwin!";
                 await Task.Delay(1000);
                 mainDataModel.FinishedGame(true, playeriam, mainDataModel, lsm);
             }
-            rightanswer++;
         }
         else if (wronganswer >= 1)
         {
