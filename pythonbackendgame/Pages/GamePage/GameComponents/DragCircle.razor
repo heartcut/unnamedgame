@@ -76,13 +76,14 @@
     protected override void OnInitialized()
     {
 
-        whichplayerwindow = playernumber + "window"; 
+        whichplayerwindow = playernumber + "window";
+        StateHasChanged(); //possible fix for not finding
         if (playernumber == playeriam)
         {
             mywindow = true;
         }
-        GameTimer(); 
         gamestate = 1;
+        GameTimer(); 
     }
     async void GameTimer()
     {
