@@ -297,6 +297,7 @@ healthbubbledead {
     font-size: x-large;
     color: white;
 }
+
 /*MAKE A SQUARE GAME BELOW----------------------------------------*/
 
 .arrow-up {
@@ -345,45 +346,6 @@ healthbubbledead {
     left: 305px;
     top: 100px;
     transform-origin: center right;
-}
-
-#colorbuttons {
-    border: none;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    font-weight: bolder;
-}
-
-.colorbutton1 {
-    background-color: green;
-    color: blue;
-    height: 50px;
-    width: 120px;
-}
-
-.colorbutton2 {
-    background-color: yellow;
-    color: red;
-    height: 50px;
-    width: 120px;
-}
-
-.colorbutton3 {
-    background-color: blue;
-    color: yellow;
-    height: 50px;
-    width: 120px;
-}
-
-.colorbutton4 {
-    background-color: red;
-    color: green;
-    height: 50px;
-    width: 120px;
 }
 
 .botofgame {

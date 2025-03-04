@@ -37,5 +37,7 @@ await builder.Build().RunAsync();
 
 
 //TODO:
-//number colors are always in order
 //cursors not in middle.
+//datamodel new and as a singleton
+//doubling up and being one player higher lock or validation
+//query parameters instead of path.

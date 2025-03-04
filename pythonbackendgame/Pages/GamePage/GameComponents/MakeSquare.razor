@@ -1,19 +1,35 @@
 ﻿
-<h2 id="game-title">Use the buttons to turn the triangles into a square.</h2>
+<h2 id="game-title">Create a square.</h2>
 <br />
+
 <div>
     <div class="arrow-up" style="transform: rotate(@GetVars(1)); transition: transform .5s;"></div>
     <div class="arrow-down" style="transform: rotate(@GetVars(2)); transition: transform .5s;"></div>
     <div class="arrow-left" style="transform: rotate(@GetVars(3)); transition: transform .5s;"></div>
     <div class="arrow-right" style="transform: rotate(@GetVars(4)); transition: transform .5s;"></div>
-</div>
-<div id="colorbuttons" class="botofgame">
-    <a class="colorbutton1" @onclick="()=>SquareRotate(1)">Rotate</a>
-    <a class="colorbutton2" @onclick="()=>SquareRotate(2)">Rotate</a>
-    <a class="colorbutton3" @onclick="()=>SquareRotate(3)">Rotate</a>
-    <a class="colorbutton4" @onclick="()=>SquareRotate(4)">Rotate</a>
+    <div style="position:absolute; z-index:10;width:150px;height:150px;left: 225px;
+    top: 75px; transform:rotate(45deg);display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;">
+    
+        <div class="quadrant" @onclick="()=>SquareRotate(2)" style="opacity:0%;"></div>
+        <div class="quadrant" @onclick="()=>SquareRotate(3)" style="opacity:0%;"></div>
+        <div class="quadrant" @onclick="()=>SquareRotate(4)" style="opacity:0%;"></div>
+        <div class="quadrant" @onclick="()=>SquareRotate(1)" style="opacity:0%;"></div>
+    
+    </div>
 </div>
 
+<style>
+    .quadrant {
+        width: 100%;
+        height: 100%;
+        background-color: orange;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    </style>
 @code {
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
     [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }

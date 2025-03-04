@@ -5,7 +5,7 @@
 {
     <div id="@whichplayerwindow" @onmousemove="OnMouseMove" style="top:-25px;position: relative; width:545px; height:225px;">
 
-        <draggable-circle @onclick="CircleClicked" style="position: absolute; left:@circleX; top:@circleY; z-index:3; box-shadow: 0 0 10px 3px grey;"></draggable-circle>
+        <draggable-circle @onmousedown="OnMouseDown" @onmouseup="OnMouseUp" style="position: absolute; left:@circleX; top:@circleY; z-index:3; box-shadow: 0 0 10px 3px grey;"></draggable-circle>
         <div style="position: absolute; width:3px; height:185px; left:15px; top:28px;z-index:3; background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
         <div style="position: absolute; width:3px; height:15px; left:60px; top:28px;z-index:3; background-color:@wallcolor; box-shadow: 0 0 10px 3px @wallcolor;"></div>
         <div style="position: absolute; width:465px; height:3px; left:60px; top:42px;z-index:3; background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
@@ -107,9 +107,13 @@
 
         }
     }
-    public async Task CircleClicked()
+    public async Task OnMouseDown()
     {
-        dragging = !dragging;
+        dragging = true;
+    }
+    public async Task OnMouseUp()
+    {
+        dragging = false;
     }
 
 

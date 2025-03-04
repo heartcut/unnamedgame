@@ -137,6 +137,8 @@
                     LSM.ReasonForUpdate = "init";
                     InitSend();
                     LSM.ReasonForUpdate = "regular";
+                    await Task.Delay(1000);
+                    //short term fix for doubling up on lobby need to add validation
                 }
                 Send();
             }
