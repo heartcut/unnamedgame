@@ -19,8 +19,6 @@ jobs:
         run: |
           git checkout -B githubactions
           sed -i 's|href="/"|href="/unnamedgame/"|g' pythonbackendgame/wwwroot/index.html
-          sed -i 's|navManager.NavigateTo("/game/0/"|navManager.NavigateTo("/unnamedgame/game/0/"|g' pythonbackendgame/Pages/LobbyPage/LobbyPage.razor
-          sed -i 's|navManager.NavigateTo("/game/1/"|navManager.NavigateTo("/unnamedgame/game/1/"|g' pythonbackendgame/Pages/LobbyPage/LobbyPage.razor
           sed -i 's|url(/Assets/rainbowcurse.png)|url(/unnamedgame/Assets/rainbowcurse.png)|g' pythonbackendgame/wwwroot/css/app.css
           sed -i 's|url(/Assets/bcurs.png)|url(/unnamedgame/Assets/bcurs.png)|g' pythonbackendgame/wwwroot/css/app.css
           sed -i 's|url(/Assets/rcurs.png)|url(/unnamedgame/Assets/rcurs.png)|g' pythonbackendgame/wwwroot/css/app.css
