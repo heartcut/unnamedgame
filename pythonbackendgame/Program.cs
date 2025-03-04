@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using pythonbackendgame;
-using pythonbackendgame.Pages.LobbyPage;
+using pythonbackendgame.Models;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.JSObjects;
 using System;
@@ -12,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<BrowserService>();
+builder.Services.AddSingleton<DataModel>();
 
 //this is for peerjs spawndev p2p
 //also need to add the script to index.html
