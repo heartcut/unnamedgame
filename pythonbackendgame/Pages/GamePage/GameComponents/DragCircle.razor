@@ -1,6 +1,16 @@
 ﻿@implements IDisposable
-<h2 id="game-title">Drag the circle to the end of the maze</h2>
-<br />
+
+@if (playernumber == playeriam)
+{
+    <h2 id="game-title">Drag the circle to the end of the maze</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+    <br />
+}
+
 @if (gamestate == 1)
 {
     <div id="@whichplayerwindow" @onmousemove="OnMouseMove" style="top:-25px;position: relative; width:545px; height:225px;">

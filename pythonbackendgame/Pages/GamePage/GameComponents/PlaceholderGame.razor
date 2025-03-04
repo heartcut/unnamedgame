@@ -1,6 +1,14 @@
-﻿<h2 id="game-title">INITIALIZING NEXT MINIGAME</h2>
-<br />
-
+﻿
+@if (whichplayersgame == playeriam)
+{
+    <h2 id="game-title">INITIALIZING NEXT MINIGAME</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+    <br />
+}
 @code {
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
     [Parameter] public EventCallback<LeechSendModel> leechsmChanged { get; set; }

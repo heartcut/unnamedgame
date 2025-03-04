@@ -1,9 +1,18 @@
 ﻿@implements IDisposable
-
+@inject SoundService SoundService
 @if(issix!=null && issix)
 {
-    <h2 id="game-title">Find all the sixes</h2>
-    <br />
+    @if(playernumber==playeriam)
+    {
+        <h2 id="game-title">Find all the sixes</h2>
+        <br />
+    }
+    else
+    {
+        <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+        <br />
+    }
+    
 
     @foreach (var row in Enumerable.Range(0, totalNumbers / columns))
     {
@@ -21,8 +30,16 @@
 }
 else if (issix != null && !issix)
 {
-    <h2 id="game-title">Find all the nines</h2>
-    <br />
+    @if (playernumber == playeriam)
+    {
+        <h2 id="game-title">Find all the nines</h2>
+        <br />
+    }
+    else
+    {
+        <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+        <br />
+    }
 
     @foreach (var row in Enumerable.Range(0, totalNumbers / columns))
     {
@@ -93,11 +110,12 @@ else{}
     {
         if (x == answer1 || x == answer2 || x == answer3 || x == answer4)
         {
+            await SoundService.PlaySound();
             rightanswer++;
             //currently updating from db make it where if a matches a number in the array it changes to 99
             if (x == answer1)
             {
-                answer1 = 99;
+                answer1 = 135;
                 if (playeriam == 1)
                 {
                     mainDataModel.P1GameVar1 = 135;

@@ -1,7 +1,15 @@
 ﻿@implements IDisposable
 
-<h2 id="game-title">Remember the colors and the numbers. @timer</h2>
 
+
+@if (playeriam == playeriam)
+{
+    <h2 id="game-title">Remember the colors and the numbers. @timer</h2>
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+}
 @if (gamestate == 1) //first screen with numbers and boxes
 {
     <div>

@@ -193,14 +193,14 @@ namespace pythonbackendgame.Models
         public string ReasonForUpdate { get; set; }
         public int SpecifyPlayerInit { get; set; }
         public string SpecifyPlayerID { get; set; }
-        public double P1Xcords { get; set; }
-        public double P1Ycords { get; set; }
-        public double P2Xcords { get; set; }
-        public double P2Ycords { get; set; }
-        public double P3Xcords { get; set; }
-        public double P3Ycords { get; set; }
-        public double P4Xcords { get; set; }
-        public double P4Ycords { get; set; }
+        public double P1Xcords { get; set; } = -99999;
+        public double P1Ycords { get; set; } = -99999;
+        public double P2Xcords { get; set; } = -99990;
+        public double P2Ycords { get; set; } = -099999;
+        public double P3Xcords { get; set; } = -099999;
+        public double P3Ycords { get; set; } = -09999;
+        public double P4Xcords { get; set; } = -0999999;
+        public double P4Ycords { get; set; } = -0999;
 
         public string ponezone { get; set; }
         public string ptwozone { get; set; }

@@ -1,6 +1,15 @@
 ﻿@implements IDisposable
-<h2 id="game-title">Remember the colors and the shapes.</h2>
-<br />
+
+@if (playeriam == playeriam)
+{
+    <h2 id="game-title">Remember the colors and the shapes.</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+    <br />
+}
 @if (gamestate == 0) //first screen with numbers and boxes
 {
     <div class="flex flex-row flex-wrap h-100">

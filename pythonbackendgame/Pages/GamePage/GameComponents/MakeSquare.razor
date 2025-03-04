@@ -1,6 +1,15 @@
 ﻿
-<h2 id="game-title">Create a square.</h2>
-<br />
+
+@if (playernumber == playeriam)
+{
+    <h2 id="game-title">Create a square.</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+    <br />
+}
 
 <div>
     <div class="arrow-up" style="transform: rotate(@GetVars(1)); transition: transform .5s;"></div>

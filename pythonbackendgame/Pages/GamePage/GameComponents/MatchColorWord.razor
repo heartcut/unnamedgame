@@ -1,5 +1,17 @@
 ﻿@implements IDisposable
-<h4>Click the circle when the text names the color of the circle. @timer</h4>
+
+@if (playernumber == playeriam)
+{
+    <h2 id="game-title">Click the circle when the text names the color of the circle. @timer</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+    <br />
+}
+
+
 @if (gamestate == 1)
 {
     <div @onclick="CheckAnswer" style="@GetCircleColor()"></div>

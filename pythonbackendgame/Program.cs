@@ -13,6 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<BrowserService>();
 builder.Services.AddSingleton<DataModel>();
+builder.Services.AddSingleton<SoundService>();
 
 //this is for peerjs spawndev p2p
 //also need to add the script to index.html
@@ -38,7 +39,5 @@ await builder.Build().RunAsync();
 
 
 //TODO:
-//cursors not in middle.
 //datamodel new and as a singleton
 //doubling up and being one player higher lock or validation
-//query parameters instead of path.
