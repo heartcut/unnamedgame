@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/pythonbackendgame.props" />
+</Project>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pythonbackendgame</title>
+    <base href="/unnamedgame/" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="./pythonbackendgame.styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="loader"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <!--below for the javascript-->
+    <script type="text/javascript">
+        window.getDimensions = function () {
+            return {
+                width: window.innerWidth,
+                height: window.innerHeight
+            };
+        };
+        window.GetElementLocation = function (elementId) {
+            var element = document.getElementById(elementId);
+            if (!element) {
+                console.error("Element with ID '" + elementId + "' not found.");
+                return null;
+            }
+
+            var rect = element.getBoundingClientRect();
+
+            return {
+                Width: rect.width,
+                Height: rect.height,
+                Top: rect.top + window.scrollY,  // Adjust for scrolling
+                Left: rect.left + window.scrollX, // Adjust for scrolling
+                Right: rect.right + window.scrollX, // Adjust for scrolling
+                Bottom: rect.bottom + window.scrollY // Adjust for scrolling
+
+            };
+        };
+
+    </script>
+    <script src="./_framework/blazor.webassembly.js"></script>
+    <!--below for the peerjs spawndev p2p-->
+    <script src="./_content/SpawnDev.BlazorJS.PeerJS/peerjs.min.js"></script>
+
+</body>
+</html>

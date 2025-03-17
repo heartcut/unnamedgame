@@ -1,0 +1,99 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = pythonbackendgame
+build_property.RootNamespace = pythonbackendgame
+build_property.ProjectDir = /home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/runner/work/unnamedgame/unnamedgame/pythonbackendgame
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/Apitestpage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQXBpdGVzdHBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/ActiveGameComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvQWN0aXZlR2FtZUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/DragCircle.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvRHJhZ0NpcmNsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/DragCircleOriginal.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvRHJhZ0NpcmNsZU9yaWdpbmFsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/MakeSquare.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvTWFrZVNxdWFyZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/MatchColorWord.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvTWF0Y2hDb2xvcldvcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/MemorizeColorNumber.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvTWVtb3JpemVDb2xvck51bWJlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/MemorizeColorShape.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvTWVtb3JpemVDb2xvclNoYXBlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/MinigameBlueprint.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvTWluaWdhbWVCbHVlcHJpbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/PlaceholderGame.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvUGxhY2Vob2xkZXJHYW1lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/SixNineGame.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvU2l4TmluZUdhbWUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GameComponents/TeamGameComponents/ActiveTeamGameComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZUNvbXBvbmVudHMvVGVhbUdhbWVDb21wb25lbnRzL0FjdGl2ZVRlYW1HYW1lQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/GamePageTest.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvR2FtZVBhZ2VUZXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/PlayerCursors.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvUGxheWVyQ3Vyc29ycy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/GamePage/PlayerHealthBar.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2FtZVBhZ2UvUGxheWVySGVhbHRoQmFyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Pages/LobbyFull.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9iYnlGdWxsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/work/unnamedgame/unnamedgame/pythonbackendgame/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0L01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-6om3wbrgo9
