@@ -9,11 +9,18 @@ namespace pythonbackendgame.Models
         public string MyCursorStyle { get; set; }
         public int PlayersInLobby { get; set; }
         public int gamestate { get; set; }
-
+        public string mycolor { get; set; } = string.Empty;
         public int BrowserHeight { get; set; }
         public int BrowserWidth { get; set; }
         public double mycursx { get; set; }
         public double mycursy { get; set; }
+
+        public DateTime sendtime { get; set; }
+        public int p1ping { get; set; } = 0;
+        public int p2ping { get; set; } = 0;
+        public int p3ping { get; set; } = 0;
+        public int p4ping { get; set; } = 0;
+
         public void MouseMoved(MouseEventArgs e)
         {
             //this sets curs to the coords around the center bascially
@@ -35,6 +42,7 @@ namespace pythonbackendgame.Models
             MDM.PlayersInLobby = fromhost.PlayersInLobby;
             MDM.Circles = fromhost.Circles;
             MDM.currentteamgamenumber = fromhost.currentteamgamenumber;
+            MDM.p1ping = DateTime.UtcNow.Subtract(MDM.sendtime).Milliseconds;
             if (localplayernumber != 2)
             {
                 MDM.P2Xcords = fromhost.P2Xcords;
@@ -91,6 +99,7 @@ namespace pythonbackendgame.Models
                     MDM.P2State = lsm.MyState;
                     MDM.P2Health = lsm.MyHealth;
                     MDM.Circlesp2clicked = lsm.CirclesIClicked;
+                    MDM.p2ping = DateTime.UtcNow.Subtract(MDM.sendtime).Milliseconds;
                     break;
                 case 3:
                     MDM.P3Xcords = lsm.PlayerXcords;
@@ -103,6 +112,7 @@ namespace pythonbackendgame.Models
                     MDM.P3State = lsm.MyState;
                     MDM.P3Health = lsm.MyHealth;
                     MDM.Circlesp3clicked = lsm.CirclesIClicked;
+                    MDM.p3ping = DateTime.UtcNow.Subtract(MDM.sendtime).Milliseconds;
                     break;
                 case 4:
                     MDM.P4Xcords = lsm.PlayerXcords;
@@ -115,6 +125,7 @@ namespace pythonbackendgame.Models
                     MDM.P4State = lsm.MyState;
                     MDM.P4Health = lsm.MyHealth;
                     MDM.Circlesp4clicked = lsm.CirclesIClicked;
+                    MDM.p4ping = DateTime.UtcNow.Subtract(MDM.sendtime).Milliseconds;
                     break;
             }
         }

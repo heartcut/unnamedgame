@@ -41,3 +41,7 @@ await builder.Build().RunAsync();
 //TODO:
 //datamodel new and as a singleton
 //doubling up and being one player higher lock or validation
+//sound
+//checkmark,lobby,gametimer, losing health timer
+//dragcircle original-cleanup
+

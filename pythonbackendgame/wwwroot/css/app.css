@@ -305,7 +305,7 @@ healthbubbledead {
     height: 0;
     border-left: 50px solid transparent;
     border-right: 50px solid transparent;
-    border-bottom: 50px solid red;
+    /*border-bottom: 50px solid red;*/
     position: absolute;
     left: 252px;
     top: 152px;
@@ -317,7 +317,7 @@ healthbubbledead {
     height: 0;
     border-left: 50px solid transparent;
     border-right: 50px solid transparent;
-    border-top: 50px solid blue;
+    
     position: absolute;
     left: 252px;
     top: 98px;
@@ -329,7 +329,7 @@ healthbubbledead {
     height: 0;
     border-top: 50px solid transparent;
     border-bottom: 50px solid transparent;
-    border-left: 50px solid green;
+    
     position: absolute;
     left: 250px;
     top: 100px;
@@ -341,7 +341,7 @@ healthbubbledead {
     height: 0;
     border-top: 50px solid transparent;
     border-bottom: 50px solid transparent;
-    border-right: 50px solid yellow;
+    
     position: absolute;
     left: 305px;
     top: 100px;

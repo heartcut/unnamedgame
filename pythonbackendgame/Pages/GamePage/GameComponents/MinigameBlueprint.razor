@@ -1,0 +1,87 @@
+﻿@implements IDisposable
+
+@if (playeriam == playeriam)
+{
+    <h2 id="game-title">Game Title Here</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">This is Invisible</h2>
+    <br />
+}
+@if (gamestate == 0) 
+{
+    
+}
+else if (gamestate == 1)
+{
+}
+else if (gamestate == 2) 
+{
+    
+}
+else if (gamestate == 3)
+{
+    <div>Correct!</div>
+}
+else
+{
+    <div>Wrong!</div>
+}
+
+@code {
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
+    //[colors,shapes,questoin1or2,answer]
+    [Parameter]
+    public int Var1 { get; set; }
+    [Parameter]
+    public int Var2 { get; set; }
+    [Parameter]
+    public int Var3 { get; set; }
+    [Parameter]
+    public int Var4 { get; set; }
+    [Parameter]
+    public int playernumber { get; set; }
+    [Parameter]
+    public int playeriam { get; set; }
+
+    PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.016));
+
+    public int gamestate = 0;
+    int memorizetimer = 0;
+    Random rndm = new Random();
+    protected override void OnInitialized()
+    {
+       
+        gamestate = 0;
+        memorizetimer = 0;
+        GameTimer();  // fire-and-forget
+    }
+    async void GameTimer()
+    {
+        while (await periodicTimer.WaitForNextTickAsync())
+        {
+            if (memorizetimer > 3 && memorizetimer <= 5)
+            {
+                gamestate = 1;
+            }
+            if (memorizetimer > 5 && gamestate != 2 && gamestate != 3 && gamestate != 4)
+            {
+                gamestate = 2;
+            }
+            await Task.Delay(1000);
+            memorizetimer = memorizetimer + 1;
+        }
+    }
+   
+    public void Dispose()
+    {
+        periodicTimer.Dispose();
+    }
+}

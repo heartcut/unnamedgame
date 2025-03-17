@@ -40,13 +40,33 @@ else if (DM.sitestate == 2)
     }
     @if (MDM.gamestate == 1)
     {
-        <div style="color:green;">> Game Started</div>
+        <div style="color:green;">
+            > Game Started
+        </div>
 
     }
     @if (MDM.gamestate == 2)
     {
         <div style="color:green;">> GAMESTATE2</div>
     }
+    <div style="color:green;">
+        @if (boolhost)
+        {
+            <div>
+                > Player 2 Ping: @MDM.p2ping
+                <br/>
+                > Player 3 Ping: @MDM.p3ping
+                <br/>
+                > Player 4 Ping: @MDM.p4ping
+            </div>
+        }
+        else
+        {
+            <div> > Player 1 Ping: @MDM.p1ping </div>
+        }
+        
+
+    </div>
     <cant-select-zone @onmousemove="MyMouseMoved" id="@MDM.MyCursorStyle">
 
         <PlayerCursors MDM="MDM" />
@@ -54,7 +74,7 @@ else if (DM.sitestate == 2)
         {
             <game-window>
                 <player1window style="@MDM.ponezone">
-                    <ActiveGameComponent gamestate="MDM.P1State" playeriam="localplayernumber" @bind-mainDataModel="MDM" whichplayersgame="1" playergame="MDM.P1Game"></ActiveGameComponent>
+                    <ActiveGameComponent gamestate="MDM.P1State" playeriam="localplayernumber" @bind-mainDataModel="MDM" @bind-lsm="LSM" whichplayersgame="1" playergame="MDM.P1Game"></ActiveGameComponent>
                     <PlayerHealthBar myhealth="MDM.P1Health" playercolor="blue" />
 
                 </player1window>
@@ -154,6 +174,7 @@ else if (DM.sitestate == 2)
         MDM.PlayersInLobby = 1;
         MDM.P1Health = STARTINGHEALTH;
         MDM.MyCursorStyle = "p" + 1;
+        MDM.mycolor = "blue";
         MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;";
         hostPeerManager = new HostPeerConnectionManager(myid, "", MDM, false);
         hostPeerManager.OnDataReceived += HostHandleDataReceived;
@@ -172,6 +193,7 @@ else if (DM.sitestate == 2)
             if (boolhost)
             {
                 localplayernumber = 1;
+                MDM.sendtime = DateTime.UtcNow;
                 HostSend();
                 gamestatecheck();
             }
@@ -186,6 +208,7 @@ else if (DM.sitestate == 2)
                     await Task.Delay(100);
                     //short term fix for doubling up on lobby need to add validation
                 }
+                MDM.sendtime = DateTime.UtcNow;
                 Send();
             }
             StateHasChanged();
@@ -282,9 +305,9 @@ else if (DM.sitestate == 2)
             //this is making other players zones un clickable
             switch (localplayernumber)
             {
-                case 2: MDM.ponezone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; MDM.P2Health = STARTINGHEALTH; break;
-                case 3: MDM.ptwozone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; MDM.P3Health = STARTINGHEALTH; break;
-                case 4: MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.P4Health = STARTINGHEALTH; break;
+                case 2: MDM.ponezone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; MDM.P2Health = STARTINGHEALTH; MDM.mycolor = "red"; break;
+                case 3: MDM.ptwozone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.pfourzone = "pointer-events:none;"; MDM.P3Health = STARTINGHEALTH; MDM.mycolor = "green"; break;
+                case 4: MDM.ptwozone = "pointer-events:none;"; MDM.pthreezone = "pointer-events:none;"; MDM.ponezone = "pointer-events:none;"; MDM.P4Health = STARTINGHEALTH; MDM.mycolor = "yellow"; break;
             }
 
             int[] temp = MinigameGeneration.InitialHostGeneration();

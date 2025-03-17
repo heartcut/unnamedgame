@@ -1,0 +1,339 @@
+﻿@implements IDisposable
+@if (playernumber == playeriam)
+{
+    <h2 id="game-title">Drag the circles to the green zone</h2>
+    <br />
+}
+else
+{
+    <h2 id="game-title" style="opacity:0%;">Find all the nines</h2>
+    <br />
+}
+
+@if (gamestate == 1)
+{
+    <div id="@whichplayerwindow" @onmousemove="OnMouseMove" style="top:-25px;position: relative; width:545px; height:225px;">
+
+        <draggable-circle1 @onmousedown="OnMouseDown" @onmouseup="OnMouseUp" style="position: absolute; left:@circleX; top:@circleY; z-index:3; box-shadow: 0 0 10px 3px grey;"></draggable-circle1>
+        <draggable-circle1 @onmousedown="OnMouseDown2" @onmouseup="OnMouseUp2" style="position: absolute; right:@circleX; bottom:@mirrorYstring; z-index:3; box-shadow: 0 0 10px 3px blue;"></draggable-circle1>
+
+        <div style="position:absolute; width:3px; height:200px;left:272px;z-index:3;background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
+        <div style="position:absolute; width:3px; height:200px;left:1px;z-index:3;background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
+        <div style="position:absolute; width:3px; height:200px;left:544px;z-index:3;background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
+
+        <div style="position:absolute; width:544px; height:3px;left:1px;z-index:3;background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
+        <div style="position:absolute; width:544px; height:3px;left:1px;top:200px;z-index:3;background-color:@wallcolor;box-shadow: 0 0 10px 3px @wallcolor;"></div>
+        <!-- You can position elements here using the mouse coordinates -->
+        <div style="position: absolute; width:50px; height:25px; left:210px; top:170px;z-index:3; background-color:green;box-shadow: 0 0 20px 10px green;"></div>
+        <div style="position: absolute; width:50px; height:25px; left:285px; top:10px;z-index:3; background-color:green;box-shadow: 0 0 20px 10px green;"></div>
+
+        <div class=box1 style="position: absolute; width:150px; height:20px; left:@box1X;top:50px;z-index:4; background-color:orange;box-shadow: 0 0 10px 5px orangered;"></div>
+        <div class=box2 style="position: absolute; width:150px; height:20px; left:@box2X;top:120px;z-index:4; background-color:orange;box-shadow: 0 0 10px 5px orangered;"></div>
+    </div>
+}
+@if (gamestate == 2)
+{
+    <div>Correct!</div>
+}
+@if (gamestate == 3)
+{
+    <div>Wrong!</div>
+}
+<style>
+    @* .box1 {
+    transition: left .1s
+    }
+
+    .box2 {
+    transition: left .1s
+    } *@
+
+    draggable-circle1 {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    }
+</style>
+
+@code {
+    [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
+    [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
+    [Parameter]
+    public LeechSendModel lsm { get; set; }
+    [Parameter]
+    public MainDataModel mainDataModel { get; set; }
+    [Parameter]
+    public int Var1 { get; set; }
+    [Parameter]
+    public int Var2 { get; set; }
+    [Parameter]
+    public int Var3 { get; set; }
+    [Parameter]
+    public int Var4 { get; set; }
+    [Parameter]
+    public int playernumber { get; set; }
+    [Parameter]
+    public int playeriam { get; set; }
+
+    [Inject]
+    protected BrowserService Service { get; set; }
+    private double mouseX;
+    private double mouseY;
+    private string circleX = "10px";
+    private string circleY = "20px";
+    private int Xoffset = 12;
+    private int Yoffset = 12;
+
+    bool dragging1 = false;
+    bool dragging2 = false;
+    bool collided = false;
+    string wallcolor = "";
+    string finishcolor = "grey";
+
+    private double conx;
+    private double conY;
+    public string mirrorYstring = "55px";
+    PeriodicTimer periodicTimer = new(TimeSpan.FromMinutes(.006));
+
+    bool mywindow = false;
+
+    public int gamestate = 0;
+    public string whichplayerwindow = "";
+    protected override void OnInitialized()
+    {
+        switch (playernumber)
+        {
+            case 1:
+                wallcolor = "blue";
+                break;
+            case 2:
+                wallcolor = "red";
+                break;
+            case 3:
+                wallcolor = "green";
+                break;
+            case 4:
+                wallcolor = "yellow";
+                break;
+        }
+        whichplayerwindow = playernumber + "window";
+        StateHasChanged(); //possible fix for not finding
+        if (playernumber == playeriam)
+        {
+            mywindow = true;
+        }
+        gamestate = 1;
+        GameTimer();
+    }
+    public bool box1goingright = true;
+    public string box1X = "0px";
+    public int box1xint = 0;
+    public string box1Y = "50px";
+    public int box1yint = 50;
+    public bool box2goingright = false;
+    public string box2X = "360px";
+    public int box2xint = 360;
+    public string box2Y = "120px";
+    public int box2yint = 120;
+    async void GameTimer()
+    {
+        while (await periodicTimer.WaitForNextTickAsync())
+        {
+            if (box1goingright)
+            {
+                box1xint += 40;
+                box1X = box1xint.ToString() + "px";
+                if (box1xint > 360) { box1goingright = false; }
+            }
+            else
+            {
+                box1xint -= 40;
+                box1X = box1xint.ToString() + "px";
+                if (box1xint < 20) { box1goingright = true; }
+            }
+            if (box2goingright)
+            {
+                box2xint += 40;
+                box2X = box2xint.ToString() + "px";
+                if (box2xint > 360) { box2goingright = false; }
+            }
+            else
+            {
+                box2xint -= 40;
+                box2X = box2xint.ToString() + "px";
+                if (box2xint < 20) { box2goingright = true; }
+            }
+
+
+            if (collided)
+            {
+            }
+            if (gamestate != 1) { Dispose(); }
+            if (!mywindow)
+            {
+                switch (playernumber)
+                {
+                    case 1: circleX = mainDataModel.P1GameVar1.ToString() + "px"; circleY = mainDataModel.P1GameVar2.ToString() + "px"; mirrorYstring = mainDataModel.P1GameVar3.ToString() + "px"; break;
+                    case 2: circleX = mainDataModel.P2GameVar1.ToString() + "px"; circleY = mainDataModel.P2GameVar2.ToString() + "px"; mirrorYstring = mainDataModel.P2GameVar3.ToString() + "px"; break;
+                    case 3: circleX = mainDataModel.P3GameVar1.ToString() + "px"; circleY = mainDataModel.P3GameVar2.ToString() + "px"; mirrorYstring = mainDataModel.P3GameVar3.ToString() + "px"; break;
+                    case 4: circleX = mainDataModel.P4GameVar1.ToString() + "px"; circleY = mainDataModel.P4GameVar2.ToString() + "px"; mirrorYstring = mainDataModel.P4GameVar3.ToString() + "px"; break;
+                }
+                //StateHasChanged();
+            }
+
+        }
+    }
+    public async Task OnMouseDown()
+    {
+        dragging1 = true;
+    }
+    public async Task OnMouseUp()
+    {
+        dragging1 = false;
+    }
+    public async Task OnMouseDown2()
+    {
+        dragging2 = true;
+    }
+    public async Task OnMouseUp2()
+    {
+        dragging2 = false;
+    }
+
+    // This method is triggered whenever the mouse moves inside the container
+    private async Task OnMouseMove(MouseEventArgs e)
+    {
+        if (gamestate != 1)
+        {
+            dragging1 = false;
+            return;
+        }
+        if (!mywindow)
+        {
+            return;
+        }
+        if (!dragging1&&!dragging2)
+        {
+            return;
+        }
+        if(dragging1)
+        {
+            var elementRect = await Service.GetElementRect(playernumber + "window");
+
+            double var1 = e.ClientX - elementRect.Left; // Mouse X relative to myContainer
+            double var2 = e.ClientY - elementRect.Top;  // Mouse Y relative to myContainer
+
+
+            circleX = $"{(Convert.ToInt32(var1) - Xoffset)}px";
+            circleY = $"{(Convert.ToInt32(var2) - Yoffset)}px";
+            //StateHasChanged(); // Update the UI
+            //this is where we check for collision
+            //horizontaldivs hardcoded
+            mirrorYstring = $"{(Convert.ToInt32(var2) - Yoffset + 27)}px";
+            int mirrorYint = (Convert.ToInt32(var2) - Yoffset + 27);
+
+            if (playernumber == 1)
+            {
+                mainDataModel.P1GameVar1 = (Convert.ToInt32(var1) - Xoffset);
+                mainDataModel.P1GameVar2 = (Convert.ToInt32(var2) - Yoffset);
+                mainDataModel.P1GameVar3 = mirrorYint;
+                lsm.GameVar1 = (Convert.ToInt32(var1) - Xoffset);
+                lsm.GameVar2 = (Convert.ToInt32(var2) - Yoffset);
+                lsm.GameVar3 = mirrorYint;
+            }
+            else
+            {
+                lsm.GameVar1 = (Convert.ToInt32(var1) - Xoffset);
+                lsm.GameVar2 = (Convert.ToInt32(var2) - Yoffset);
+                lsm.GameVar3 = mirrorYint;
+            }
+
+        }
+        if(dragging2)
+        {
+            var elementRect = await Service.GetElementRect(playernumber + "window");
+
+            double var1 = e.ClientX - elementRect.Left; // Mouse X relative to myContainer
+            double var2 = e.ClientY - elementRect.Top;  // Mouse Y relative to myContainer
+
+
+            circleX = $"{525-(Convert.ToInt32(var1) - Xoffset)}px";
+            mirrorYstring = $"{205-(Convert.ToInt32(var2) - Yoffset)}px";
+
+
+            circleY = $"{205 - (Convert.ToInt32(var2) - Yoffset + 27)}px";
+
+            if (playernumber == 1)
+            {
+                mainDataModel.P1GameVar1 = 525 - (Convert.ToInt32(var1) - Xoffset);
+                mainDataModel.P1GameVar2 = 205 - (Convert.ToInt32(var2) - Yoffset + 27);
+                mainDataModel.P1GameVar3 = 205 - (Convert.ToInt32(var2) - Yoffset);
+                lsm.GameVar1 = 525 - (Convert.ToInt32(var1) - Xoffset);
+                lsm.GameVar2 = 205 - (Convert.ToInt32(var2) - Yoffset + 27);
+                lsm.GameVar3 = 205 - (Convert.ToInt32(var2) - Yoffset);
+            }
+            else
+            {
+                lsm.GameVar1 = 525 - (Convert.ToInt32(var1) - Xoffset);
+                lsm.GameVar2 = 205 - (Convert.ToInt32(var2) - Yoffset + 27);
+                lsm.GameVar3 = 205 - (Convert.ToInt32(var2) - Yoffset);
+            }
+        }
+        //collision check here first box
+        if (lsm.GameVar2 > 50 && lsm.GameVar2 < 70 && (lsm.GameVar1 > box1xint && lsm.GameVar1 < box1xint+150))
+        {
+            if (!collided)
+            {
+                wallcolor = "red";
+                collided = true;
+                await Task.Delay(1000);
+                gamestate = 3;
+                await Task.Delay(1000);
+                mainDataModel.FinishedGame(false, playeriam, mainDataModel, lsm);
+            }
+
+        }
+        //2nd box
+        if (lsm.GameVar2 > 110 && lsm.GameVar2 < 130 && (lsm.GameVar1 > box2xint  && lsm.GameVar1 < box2xint + 150))
+        {
+            if (!collided)
+            {
+                wallcolor = "red";
+                collided = true;
+                await Task.Delay(1000);
+                gamestate = 3;
+                await Task.Delay(1000);
+                mainDataModel.FinishedGame(false, playeriam, mainDataModel, lsm);
+            }
+        }
+
+
+
+        if (lsm.GameVar1 > 210 && lsm.GameVar1 < 260 && (lsm.GameVar2 < 170 && lsm.GameVar2 > 145))
+        {
+            if (!collided)
+            {
+                collided = true;
+
+                wallcolor = "green";
+
+                await Task.Delay(1000);
+                gamestate = 2;
+                await Task.Delay(1000);
+                mainDataModel.FinishedGame(true, playeriam, mainDataModel, lsm);
+            }
+        }
+
+
+        
+
+        
+        
+        // Optionally call StateHasChanged() if needed (usually not required in event callbacks)
+    }
+    public void Dispose()
+    {
+        periodicTimer.Dispose();
+    }
+}

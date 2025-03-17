@@ -42,7 +42,10 @@
                 Width: rect.width,
                 Height: rect.height,
                 Top: rect.top + window.scrollY,  // Adjust for scrolling
-                Left: rect.left + window.scrollX // Adjust for scrolling
+                Left: rect.left + window.scrollX, // Adjust for scrolling
+                Right: rect.right + window.scrollX, // Adjust for scrolling
+                Bottom: rect.bottom + window.scrollY // Adjust for scrolling
+
             };
         };
 

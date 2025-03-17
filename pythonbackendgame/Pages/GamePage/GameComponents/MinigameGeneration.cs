@@ -12,8 +12,9 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
         //2-memorizecolornumber
         //3-memorizecolorshape
         //4-matchcolorword
-        //5-dragcircle
-        static int[] tempgames = { 0,1,2,3,4,5 };
+        //5-dragcircleoriginal
+        //6-dragcircle
+        static int[] tempgames = { 0,1,2,3,4,5,6 };
         public static void StartNewGameLeech(LeechSendModel lsm)
         {
             Random rndm = new Random();
@@ -143,8 +144,13 @@ namespace pythonbackendgame.Pages.GamePage.GameComponents
             }
             if (whatgame == 5)
             {
-                //drag circle
+                //drag circleoriginal
                 return new[] { 50 , 50 , rndm.Next(0, 4), 0 };
+            }
+            if (whatgame == 8)
+            {
+                //drag circle
+                return new[] { 50, 50, rndm.Next(0, 4), 0 };
             }
             //else if (whatgame == 1)
             else

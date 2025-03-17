@@ -12,33 +12,33 @@ else
 }
 
 <div>
-    <div class="arrow-up" style="transform: rotate(@GetVars(1)); transition: transform .5s;"></div>
-    <div class="arrow-down" style="transform: rotate(@GetVars(2)); transition: transform .5s;"></div>
-    <div class="arrow-left" style="transform: rotate(@GetVars(3)); transition: transform .5s;"></div>
-    <div class="arrow-right" style="transform: rotate(@GetVars(4)); transition: transform .5s;"></div>
+    <div class="arrow-up" style="border-bottom: 50px solid @color; transform: rotate(@GetVars(1)); transition: transform .5s;"></div>
+    <div class="arrow-down" style="border-top: 50px solid @color;transform: rotate(@GetVars(2)); transition: transform .5s;"></div>
+    <div class="arrow-left" style="border-right: 50px solid @color;transform: rotate(@GetVars(3)); transition: transform .5s;"></div>
+    <div class="arrow-right" style="border-left: 50px solid @color;transform: rotate(@GetVars(4)); transition: transform .5s;"></div>
     <div style="position:absolute; z-index:10;width:150px;height:150px;left: 225px;
     top: 75px; transform:rotate(45deg);display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;">
-    
+
         <div class="quadrant" @onclick="()=>SquareRotate(2)" style="opacity:0%;"></div>
         <div class="quadrant" @onclick="()=>SquareRotate(3)" style="opacity:0%;"></div>
         <div class="quadrant" @onclick="()=>SquareRotate(4)" style="opacity:0%;"></div>
         <div class="quadrant" @onclick="()=>SquareRotate(1)" style="opacity:0%;"></div>
-    
+
     </div>
 </div>
 
 <style>
     .quadrant {
-        width: 100%;
-        height: 100%;
-        background-color: orange;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     }
-    </style>
+</style>
 @code {
     [Parameter] public EventCallback<MainDataModel> mainDataModelChanged { get; set; }
     [Parameter] public EventCallback<LeechSendModel> lsmChanged { get; set; }
@@ -59,10 +59,26 @@ else
     [Parameter]
     public int playeriam { get; set; }
 
+    public string color = string.Empty;
     public string done = "not yet";
     protected override void OnInitialized()
     {
         done = "not yet";
+        switch (playernumber)
+        {
+            case 1:
+                color = "blue";
+                break;
+            case 2:
+                color = "red";
+                break;
+            case 3:
+                color = "green";
+                break;
+            case 4:
+                color = "yellow";
+                break;
+        }
     }
     public string GetVars(int which)
     {
