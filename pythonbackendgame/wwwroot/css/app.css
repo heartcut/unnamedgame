@@ -2,11 +2,11 @@ html, body {
     background-color: black;
     color: grey;
     font-family: 'Share Tech', sans-serif;
-    cursor: url(/Assets/rainbowcurse.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/rainbowcurse.png) -2 -2,auto;
 
 }
 main {
-    cursor: url(/Assets/rainbowcurse.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/rainbowcurse.png) -2 -2,auto;
 }
 h1:focus {
     outline: none;
@@ -122,7 +122,7 @@ lobby-item {
     background-color: dimgrey;
     border: thin black;
     /*cursor: pointer;*/
-    cursor: url(/Assets/rainbowcurse.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/rainbowcurse.png) -2 -2,auto;
     transition: background-color .5s;
 }
 
@@ -270,19 +270,19 @@ healthbubbledead {
 }
 
 #p1 {
-    cursor: url(/Assets/bcurs.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/bcurs.png) -2 -2,auto;
 }
 
 #p2 {
-    cursor: url(/Assets/rcurs.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/rcurs.png) -2 -2,auto;
 }
 
 #p3 {
-    cursor: url(/Assets/gcurs.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/gcurs.png) -2 -2,auto;
 }
 
 #p4 {
-    cursor: url(/Assets/ycurs.png) -2 -2,auto;
+    cursor: url(/unnamedgame/Assets/ycurs.png) -2 -2,auto;
 }
 
 
